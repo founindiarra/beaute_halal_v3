@@ -1,0 +1,22 @@
+node_modules
+dist
+dist-ssr
+coverage
+*.log
+.DS_Store
+.eslintcache
+*.tsbuildinfo
+
+# Variables locales : jamais versionnées (les modèles .env.example / .env.development / .env.production le sont, ils ne contiennent aucun secret)
+.env
+.env.local
+.env.*.local
+
+# Éditeurs
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.sw?
+
+# Fichiers générés par `npm run seo` selon les variables d'environnement
+public/sitemap.xml

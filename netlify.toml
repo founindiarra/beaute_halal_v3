@@ -1,0 +1,10 @@
+# VITE_API_URL, VITE_SITE_URL et VITE_ALLOW_INDEXING se définissent aussi dans
+# Netlify (Site settings → Environment variables) : elles sont lues au build.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
