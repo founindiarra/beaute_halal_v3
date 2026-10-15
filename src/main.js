@@ -7,6 +7,13 @@ import { createApp } from 'vue'
 
 import App from './App.vue'
 import router from './router'
+import { magnetic, parallax, tilt } from './directives/motion'
 import { reveal } from './directives/reveal'
 
-createApp(App).use(router).directive('reveal', reveal).mount('#app')
+createApp(App)
+  .use(router)
+  .directive('reveal', reveal)
+  .directive('parallax', parallax)
+  .directive('magnetic', magnetic)
+  .directive('tilt', tilt)
+  .mount('#app')

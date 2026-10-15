@@ -47,7 +47,9 @@ watch(
 <style scoped>
 .aimg { position: relative; width: 100%; overflow: hidden; background: var(--paper); }
 .aimg img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s var(--ease); }
-.aimg img.is-loaded { opacity: 1; }
+.aimg img.is-loaded { opacity: 1; animation: imgIn 1.1s var(--ease) both; }
+@keyframes imgIn { from { opacity: 0; scale: 1.08; } }
+@media (prefers-reduced-motion: reduce) { .aimg img.is-loaded { animation: none; } }
 .aimg-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--caramel); background: var(--grad-soft); }
 .aimg-fallback svg { width: 38%; max-width: 64px; height: auto; opacity: 0.7; }
 </style>

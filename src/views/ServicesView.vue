@@ -57,7 +57,7 @@ const list = computed(() => {
 
 <style scoped>
 .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
-.pill-btn { min-height: 44px; padding: 0.4rem 1.2rem; font-weight: 700; font-size: 0.9rem; background: #fff; color: var(--ink); border: 1.5px solid rgba(42, 21, 32, 0.15); border-radius: 999px; cursor: pointer; transition: all 0.25s var(--ease); }
+.pill-btn { min-height: 44px; padding: 0.4rem 1.2rem; font-weight: 700; font-size: 0.9rem; background: #fff; color: var(--ink); border: 1.5px solid rgba(24, 19, 16, 0.15); border-radius: 999px; cursor: pointer; transition: all 0.25s var(--ease); }
 .pill-btn:hover { border-color: var(--copper); color: var(--copper); }
 .pill-btn[aria-pressed='true'] { background: var(--grad-btn); border-color: transparent; color: #fff; }
 .grid { display: grid; gap: 1.5rem; }

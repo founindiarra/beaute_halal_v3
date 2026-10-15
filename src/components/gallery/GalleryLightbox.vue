@@ -13,7 +13,9 @@ const closeBtn = ref(null)
 let previouslyFocused = null
 let touchX = null
 
+const dir = ref(1)
 const go = (step) => {
+  dir.value = step
   const n = props.items.length
   emit('update:index', (props.index + step + n) % n)
 }
@@ -71,8 +73,8 @@ const onTouchEnd = (e) => {
     <div class="stage" @touchstart.passive="onTouchStart" @touchend.passive="onTouchEnd">
       <button v-if="items.length > 1" type="button" class="nav prev" aria-label="Photo précédente" @click="go(-1)"><span aria-hidden="true">←</span></button>
       <figure>
-        <img :key="item.id" :src="item.imageUrl" :alt="item.title" />
-        <figcaption>
+        <img :key="item.id" :src="item.imageUrl" :alt="item.title" :style="{ '--dir': `${dir * 36}px` }" />
+        <figcaption :key="item.id">
           <p class="count">{{ index + 1 }} / {{ items.length }}<template v-if="item.category?.name"> · {{ item.category.name }}</template></p>
           <h2>{{ item.title }}</h2>
           <p v-if="item.description" class="desc">{{ item.description }}</p>
@@ -85,21 +87,29 @@ const onTouchEnd = (e) => {
 </template>
 
 <style scoped>
-.lb { position: fixed; inset: 0; z-index: 300; background: rgba(34, 14, 28, 0.96); display: grid; place-items: center; padding: 3.5rem 0.75rem 1rem; overflow-y: auto; }
-.close { position: fixed; top: 0.6rem; right: 0.6rem; z-index: 2; width: 48px; height: 48px; background: none; border: 1.5px solid rgba(255, 240, 232, 0.5); border-radius: 50%; color: var(--ivory); cursor: pointer; font-size: 1.1rem; }
+.lb { position: fixed; inset: 0; z-index: 300; background: rgba(18, 14, 12, 0.96); display: grid; place-items: center; padding: 3.5rem 0.75rem 1rem; overflow-y: auto; }
+.close { position: fixed; top: 0.6rem; right: 0.6rem; z-index: 2; width: 48px; height: 48px; background: none; border: 1.5px solid rgba(246, 243, 235, 0.5); border-radius: 50%; color: var(--ivory); cursor: pointer; font-size: 1.1rem; }
 .close:hover { background: var(--ivory); color: var(--ink); }
 .stage { display: grid; grid-template-columns: 1fr; width: min(1100px, 100%); gap: 0.75rem; align-items: center; }
 figure { margin: 0; display: grid; gap: 1.1rem; min-width: 0; }
-img { width: 100%; max-height: 66vh; object-fit: contain; background: #1d0d19; border-radius: 22px; animation: fade 0.35s var(--ease); }
+img { width: 100%; max-height: 66vh; object-fit: contain; background: #1d0d19; border-radius: 22px; animation: fade 0.6s var(--ease) both; }
 figcaption { display: grid; gap: 0.5rem; justify-items: start; }
 figcaption h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); }
 .count { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--caramel); font-weight: 600; }
 .desc { color: var(--on-dark-muted); max-width: 60ch; }
-.nav { position: fixed; bottom: 0.8rem; width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid rgba(255, 240, 232, 0.5); background: rgba(34, 14, 28, 0.85); color: var(--ivory); cursor: pointer; font-size: 1.2rem; z-index: 2; }
+.nav { position: fixed; bottom: 0.8rem; width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid rgba(246, 243, 235, 0.5); background: rgba(18, 14, 12, 0.85); color: var(--ivory); cursor: pointer; font-size: 1.2rem; z-index: 2; }
 .nav:hover { background: var(--ivory); color: var(--ink); }
 .prev { right: 4.6rem; }
 .next { right: 0.8rem; }
-@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+figcaption > * { animation: capIn 0.7s var(--ease) both; }
+figcaption > :nth-child(2) { animation-delay: 0.06s; }
+figcaption > :nth-child(3) { animation-delay: 0.12s; }
+figcaption > :nth-child(4) { animation-delay: 0.18s; }
+.nav, .close { transition: background-color 0.25s, color 0.25s, transform 0.3s var(--ease); }
+.nav:hover { transform: scale(1.1); }
+.close:hover { transform: rotate(90deg); }
+@keyframes fade { from { opacity: 0; transform: translate3d(var(--dir, 0px), 0, 0) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes capIn { from { opacity: 0; transform: translate3d(0, 16px, 0); } }
 @media (min-width: 900px) {
   .lb { padding: 2rem; }
   .stage { grid-template-columns: 56px 1fr 56px; gap: 1.2rem; }

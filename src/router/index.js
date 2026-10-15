@@ -73,9 +73,13 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, saved) {
-    if (saved) return saved
-    if (to.hash) return { el: to.hash, top: 90, behavior: 'smooth' }
-    return { top: 0 }
+    const position = saved || (to.hash ? { el: to.hash, top: 90, behavior: 'smooth' } : { top: 0 })
+    /* Changement de page : on attend la fin du fondu de sortie (voir .page-leave-active)
+       pour ne pas faire « sauter » l'ancienne page en haut avant qu'elle ne disparaisse. */
+    const changesPage = from.name && to.name !== from.name
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (!changesPage || reduced) return position
+    return new Promise((resolve) => setTimeout(() => resolve(position), 240))
   },
 })
 

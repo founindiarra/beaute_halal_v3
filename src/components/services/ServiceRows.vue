@@ -22,7 +22,7 @@ const book = (service) => {
 
 <template>
   <ol class="rows">
-    <li v-for="(s, i) in services" :key="s.id || s.slug" v-reveal class="row">
+    <li v-for="(s, i) in services" :key="s.id || s.slug" v-reveal="(i % 3) * 70" class="row">
       <span class="numeral n" aria-hidden="true">{{ pad2(start + i) }}</span>
       <div v-if="withImages" class="thumb">
         <ApiImage :src="s.imageUrl" :alt="s.name" ratio="1 / 1" />
@@ -43,6 +43,12 @@ const book = (service) => {
 </template>
 
 <style scoped>
+.row { transition: background-color 0.4s, padding-left 0.45s var(--ease), opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.row:hover { padding-left: 0.8rem; background: linear-gradient(90deg, rgba(232, 214, 170, 0.45), transparent 70%); }
+.n { display: inline-block; transition: transform 0.45s var(--ease); transform-origin: left; }
+.row:hover .n { transform: scale(1.2); }
+.thumb :deep(img) { transition: transform 0.8s var(--ease); }
+.row:hover .thumb :deep(img) { transform: scale(1.1); }
 .rows { border-top: 1px solid var(--line-strong); }
 .row { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1.1rem; align-items: start; padding-block: 1.5rem; border-bottom: 1px solid var(--line); }
 .n { font-size: 1.1rem; padding-top: 0.2rem; min-width: 2ch; }

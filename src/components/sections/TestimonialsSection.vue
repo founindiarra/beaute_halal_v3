@@ -50,7 +50,7 @@ watch(items, () => nextTick(update))
       </header>
     </div>
     <div class="container">
-      <ul ref="track" class="quotes" tabindex="0" aria-label="Avis de clientes, faites défiler pour en voir d’autres" @scroll.passive="update">
+      <ul ref="track" v-reveal.fade class="quotes" tabindex="0" aria-label="Avis de clientes, faites défiler pour en voir d’autres" @scroll.passive="update">
         <li v-for="(t, i) in items" :key="t.id || i">
           <blockquote>« {{ t.comment }} »</blockquote>
           <footer>
@@ -78,9 +78,12 @@ watch(items, () => nextTick(update))
 .arrow-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .quotes { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.4rem; scrollbar-width: none; border-radius: var(--radius-lg); }
 .quotes::-webkit-scrollbar { display: none; }
+.quotes li { position: relative; transition: transform 0.45s var(--ease), background-color 0.35s, border-color 0.35s; }
+.quotes li:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.14); border-color: rgba(228, 200, 120, 0.5); }
+.quotes li::before { content: '“'; position: absolute; right: 1.1rem; top: 0.2rem; font-family: var(--font-display); font-size: 5rem; line-height: 1; color: rgba(228, 200, 120, 0.22); pointer-events: none; }
 .quotes li { flex: none; width: min(86%, 380px); scroll-snap-align: start; padding: 1.4rem 1.5rem; display: grid; gap: 1rem; align-content: space-between; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: var(--radius-lg); backdrop-filter: blur(6px); }
 blockquote { margin: 0; font-family: var(--font-display); font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.35; font-style: italic; font-variation-settings: 'opsz' 48; }
-footer { display: flex; flex-wrap: wrap; gap: 0.2rem 0.6rem; font-size: 0.9rem; color: rgba(255, 243, 236, 0.88); }
+footer { display: flex; flex-wrap: wrap; gap: 0.2rem 0.6rem; font-size: 0.9rem; color: rgba(247, 244, 238, 0.88); }
 .stars { color: var(--caramel); letter-spacing: 0.1em; }
 .date { opacity: 0.8; }
 @media (min-width: 900px) { .quotes li { width: calc((100% - 2rem) / 3); } }

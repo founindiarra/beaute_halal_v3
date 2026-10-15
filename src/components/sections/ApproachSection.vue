@@ -10,14 +10,14 @@ const { salon } = useSalon()
   <section class="section approach">
     <div class="container">
       <div class="panel">
-        <div v-reveal class="statement">
+        <div v-reveal.left class="statement">
           <p class="eyebrow">Le savoir-faire</p>
           <h2>Une affaire de <em>geste</em>, de tension et de régularité.</h2>
           <p v-if="salon.tagline" class="lede">{{ salon.tagline }}</p>
           <RouterLink :to="{ name: 'about' }" class="link-arrow">Découvrir le salon <span class="arrow" aria-hidden="true">→</span></RouterLink>
         </div>
         <ul class="values">
-          <li v-for="(v, i) in values" :key="v.title" v-reveal="i * 90">
+          <li v-for="(v, i) in values" :key="v.title" v-reveal.right="i * 110">
             <span class="numeral">{{ pad2(i + 1) }}</span>
             <div>
               <h3>{{ v.title }}</h3>
@@ -37,6 +37,8 @@ const { salon } = useSalon()
 .values { display: grid; gap: 1rem; }
 .values li { display: grid; grid-template-columns: 3.4rem 1fr; gap: 0.8rem; padding: 1.3rem 1.4rem; background: rgba(255, 255, 255, 0.78); border-radius: 22px; backdrop-filter: blur(6px); }
 .values .numeral { font-size: 2.2rem; }
+.values li { transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), background-color 0.3s; }
+.values li:hover { transform: translateX(8px); background: rgba(255, 255, 255, 0.95); box-shadow: var(--shadow); }
 .values p { color: var(--muted); margin-top: 0.3rem; font-size: 0.97rem; }
 @media (min-width: 900px) { .panel { grid-template-columns: 1.05fr 1fr; gap: 4rem; align-items: center; } }
 </style>

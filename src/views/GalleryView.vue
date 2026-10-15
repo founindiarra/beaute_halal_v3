@@ -85,7 +85,7 @@ const book = (item) => {
           @retry="load"
         >
           <ul class="cards">
-            <li v-for="(item, i) in items" :key="item.id" v-reveal="(i % 4) * 70">
+            <li v-for="(item, i) in items" :key="item.id" v-reveal.zoom="(i % 4) * 70">
               <button type="button" class="card" :aria-label="`Agrandir la photo : ${item.title}`" @click="open(i)">
                 <span class="media">
                   <ApiImage :src="item.imageUrl" :alt="item.title" ratio="4 / 5" />
@@ -107,27 +107,33 @@ const book = (item) => {
 
     <VisitBlock title="Une coiffure vous inspire ?" text="Ouvrez la photo, choisissez « Réserver cette coiffure » : son nom accompagne votre demande jusqu’au salon." />
 
-    <GalleryLightbox v-if="current >= 0 && items[current]" v-model:index="current" :items="items" @close="close" @book="book" />
+    <Transition name="lb"><GalleryLightbox v-if="current >= 0 && items[current]" v-model:index="current" :items="items" @close="close" @book="book" /></Transition>
   </div>
 </template>
 
 <style scoped>
 .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
-.chip { min-height: 44px; padding: 0.4rem 1.2rem; font-weight: 700; font-size: 0.9rem; background: #fff; color: var(--ink); border: 1.5px solid rgba(42, 21, 32, 0.15); border-radius: 999px; cursor: pointer; transition: all 0.25s var(--ease); }
+.chip { min-height: 44px; padding: 0.4rem 1.2rem; font-weight: 700; font-size: 0.9rem; background: #fff; color: var(--ink); border: 1.5px solid rgba(24, 19, 16, 0.15); border-radius: 999px; cursor: pointer; transition: all 0.25s var(--ease); }
 .chip:hover { border-color: var(--copper); color: var(--copper); }
-.chip[aria-pressed='true'] { background: var(--grad-btn); border-color: transparent; color: #fff; }
+.chip[aria-pressed='true'] { background: var(--grad-btn); border-color: transparent; color: #fff; transform: translateY(-2px); box-shadow: 0 12px 22px -12px rgba(122, 89, 38, 0.7); }
+.chip:active { transform: scale(0.96); }
 .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
 .card { display: flex; flex-direction: column; width: 100%; height: 100%; padding: 0.45rem; text-align: left; font: inherit; color: inherit; background: #fff; border: 0; border-radius: 28px; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease); }
 .card:hover, .card:focus-visible { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
 .media { position: relative; display: block; border-radius: 22px; overflow: hidden; }
 .media :deep(img) { transition: transform 0.9s var(--ease); }
 .card:hover .media :deep(img), .card:focus-visible .media :deep(img) { transform: scale(1.07); }
-.tag { position: absolute; left: 0.6rem; top: 0.6rem; padding: 0.3rem 0.75rem; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: rgba(255, 255, 255, 0.92); border-radius: 999px; backdrop-filter: blur(6px); }
+.card:hover .tag { transform: translateX(4px); }
+.tag { transition: transform 0.4s var(--ease); position: absolute; left: 0.6rem; top: 0.6rem; padding: 0.3rem 0.75rem; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); background: rgba(255, 255, 255, 0.92); border-radius: 999px; backdrop-filter: blur(6px); }
 .zoom { position: absolute; right: 0.6rem; bottom: 0.6rem; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: #fff; background: var(--grad-btn); box-shadow: var(--shadow); transform: scale(0.85); opacity: 0.9; transition: transform 0.35s var(--ease); }
 .card:hover .zoom, .card:focus-visible .zoom { transform: scale(1.08) rotate(90deg); }
 .body { display: grid; gap: 0.25rem; padding: 0.85rem 0.7rem 0.8rem; }
 .name { font-family: var(--font-display); font-size: 1.12rem; font-weight: 600; line-height: 1.2; font-variation-settings: 'opsz' 36; }
-.more { font-size: 0.82rem; font-weight: 700; color: var(--copper); }
+.more { font-size: 0.82rem; font-weight: 700; color: var(--copper); transition: letter-spacing 0.4s var(--ease); }
+.card:hover .more { letter-spacing: 0.04em; }
+/* Voile sombre + reflet au survol de la photo */
+.media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(24, 19, 16, 0.45)); opacity: 0; transition: opacity 0.5s var(--ease); pointer-events: none; }
+.card:hover .media::after, .card:focus-visible .media::after { opacity: 1; }
 @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); gap: 1.4rem; } }
 @media (min-width: 1100px) { .cards { grid-template-columns: repeat(4, 1fr); } }
 </style>

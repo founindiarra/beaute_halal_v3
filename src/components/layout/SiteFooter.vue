@@ -17,9 +17,9 @@ const nav = [
 
 <template>
   <footer class="footer-wrap on-dark">
-    <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,80 L0,80 Z" fill="#2a1520" /></svg>
+    <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,80 L0,80 Z" fill="#181310" /></svg>
     <div class="footer on-dark">
-      <div class="container grid">
+      <div v-reveal.fade class="container grid">
         <div class="col-brand">
           <RouterLink :to="{ name: 'home' }" class="brand" aria-label="Beauté Halal — accueil"><Wordmark /></RouterLink>
           <p v-if="salon.tagline || salon.shortDescription" class="blurb">{{ salon.tagline || salon.shortDescription }}</p>
@@ -74,14 +74,14 @@ const nav = [
 .footer { background: var(--grad-dark); padding-top: clamp(2.5rem, 6vw, 4.5rem); }
 .wave { margin-bottom: -1px; }
 .grid { display: grid; gap: 2.75rem 2rem; grid-template-columns: 1fr; padding-bottom: 3.5rem; }
-.brand { display: inline-block; text-decoration: none; margin-bottom: 1.25rem; color: #fff3ec; }
-.brand :deep(.wordmark), .brand :deep(.wordmark-name) { color: #fff3ec; }
-.brand :deep(.wordmark-sub) { color: rgba(255, 240, 232, 0.78); }
+.brand { display: inline-block; text-decoration: none; margin-bottom: 1.25rem; color: #f7f4ee; }
+.brand :deep(.wordmark), .brand :deep(.wordmark-name) { color: #f7f4ee; }
+.brand :deep(.wordmark-sub) { color: rgba(246, 243, 235, 0.78); }
 .blurb { color: var(--on-dark-muted); max-width: 26rem; }
 .socials { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin-top: 1.25rem; }
 .h { font-family: var(--font-body); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--caramel); margin-bottom: 1rem; line-height: 1.2; }
 .col ul { display: flex; flex-direction: column; gap: 0.1rem; }
-.col a, .socials a { display: inline-flex; align-items: center; min-height: 40px; text-decoration: none; color: #fff3ec; }
+.col a, .socials a { display: inline-flex; align-items: center; min-height: 40px; text-decoration: none; color: #f7f4ee; }
 .col a:hover, .socials a:hover { color: var(--caramel); text-decoration: underline; text-underline-offset: 4px; }
 address { font-style: normal; color: var(--on-dark-muted); padding-block: 0.4rem; }
 .hours > div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.14); font-size: 0.95rem; }

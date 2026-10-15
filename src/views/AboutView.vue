@@ -24,12 +24,12 @@ const { salon } = useSalon()
 
     <section class="section">
       <div class="container grid">
-        <div v-reveal class="intro">
+        <div v-reveal.left class="intro">
           <p class="eyebrow">Notre approche</p>
           <h2>Trois principes, <em>sans fioritures</em>.</h2>
         </div>
         <ol class="values">
-          <li v-for="(v, i) in values" :key="v.title" v-reveal="i * 90">
+          <li v-for="(v, i) in values" :key="v.title" v-reveal.right="i * 110">
             <span class="numeral">{{ pad2(i + 1) }}</span>
             <div><h3>{{ v.title }}</h3><p>{{ v.text }}</p></div>
           </li>
@@ -49,6 +49,8 @@ const { salon } = useSalon()
 .values { display: grid; gap: 1rem; }
 .values li { display: grid; grid-template-columns: 3.6rem 1fr; gap: 1rem; padding: 1.5rem; background: #fff; border-radius: 22px; box-shadow: var(--shadow); }
 .values .numeral { font-size: 2.4rem; }
+.values li { transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease); }
+.values li:hover { transform: translateX(8px); box-shadow: var(--shadow-lift); }
 .values p { color: var(--muted); margin-top: 0.4rem; }
 @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1.2fr; gap: 5rem; } .intro { position: sticky; top: 7rem; } }
 </style>

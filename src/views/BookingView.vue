@@ -52,6 +52,16 @@ onMounted(async () => {
   }
 })
 
+/* Sens de la transition entre étapes : glisse vers l'avant, ou vers l'arrière si on revient. */
+const direction = ref('fwd')
+watch(
+  () => state.step,
+  (now, before) => {
+    direction.value = now >= before ? 'fwd' : 'back'
+  },
+  { flush: 'sync' },
+)
+
 const focusHeading = async () => {
   await nextTick()
   heading.value?.focus({ preventScroll: true })
@@ -126,6 +136,8 @@ const stepTitle = computed(
               </li>
             </ol>
 
+            <div class="track" aria-hidden="true"><i :style="{ transform: `scaleX(${(state.step - 1) / Math.max(1, steps.length - 1)})` }" /></div>
+
             <div v-if="resolving" class="alert alert-info" role="status">Chargement de votre sélection…</div>
             <div v-if="resolveError" class="alert alert-info" role="status">{{ resolveError }}</div>
 
@@ -145,35 +157,40 @@ const stepTitle = computed(
                 <button type="button" class="linkish" @click="clearInspiration()">retirer</button>
               </div>
 
-              <StepService v-if="state.step === 1" :selected="state.service" @select="b.selectService" />
+              <Transition :name="`step-${direction}`" mode="out-in">
+                <div :key="state.step" class="step-body">
+                <StepService v-if="state.step === 1" :selected="state.service" @select="b.selectService" />
 
-              <StepDateTime
-                v-else-if="state.step === 2"
-                :service-id="state.service?.id ?? null"
-                :date="state.date"
-                :time="state.time"
-                :refresh-key="state.availabilityVersion"
-                @select-date="b.selectDate"
-                @select-time="b.selectTime"
-              />
+                <StepDateTime
+                  v-else-if="state.step === 2"
+                  :service-id="state.service?.id ?? null"
+                  :date="state.date"
+                  :time="state.time"
+                  :refresh-key="state.availabilityVersion"
+                  @select-date="b.selectDate"
+                  @select-time="b.selectTime"
+                />
 
-              <StepDetails
-                v-else-if="state.step === 3"
-                :customer="state.customer"
-                :errors="errors"
-                @update="updateCustomer"
-              />
+                <StepDetails
+                  v-else-if="state.step === 3"
+                  :customer="state.customer"
+                  :errors="errors"
+                  @update="updateCustomer"
+                />
 
-              <div v-else class="review">
-                <dl>
-                  <div v-for="r in summaryRows" :key="r.k" v-show="r.v"><dt>{{ r.k }}</dt><dd>{{ r.v }}</dd></div>
-                  <div><dt>Nom</dt><dd>{{ state.customer.firstName }} {{ state.customer.lastName }}</dd></div>
-                  <div><dt>Téléphone</dt><dd>{{ state.customer.phone }}</dd></div>
-                  <div><dt>E-mail</dt><dd>{{ state.customer.email }}</dd></div>
-                  <div v-if="state.customer.note.trim()"><dt>Commentaire</dt><dd class="pre">{{ state.customer.note }}</dd></div>
-                </dl>
-                <p class="alert alert-info">Vous envoyez une <strong>demande</strong> : le rendez-vous n’est définitif qu’après confirmation du salon. Tarif et durée sont ceux de la prestation, vérifiés par le salon.</p>
-              </div>
+                <div v-else class="review">
+                  <dl>
+                    <div v-for="r in summaryRows" :key="r.k" v-show="r.v"><dt>{{ r.k }}</dt><dd>{{ r.v }}</dd></div>
+                    <div><dt>Nom</dt><dd>{{ state.customer.firstName }} {{ state.customer.lastName }}</dd></div>
+                    <div><dt>Téléphone</dt><dd>{{ state.customer.phone }}</dd></div>
+                    <div><dt>E-mail</dt><dd>{{ state.customer.email }}</dd></div>
+                    <div v-if="state.customer.note.trim()"><dt>Commentaire</dt><dd class="pre">{{ state.customer.note }}</dd></div>
+                  </dl>
+                  <p class="alert alert-info">Vous envoyez une <strong>demande</strong> : le rendez-vous n’est définitif qu’après confirmation du salon. Tarif et durée sont ceux de la prestation, vérifiés par le salon.</p>
+                </div>
+
+                </div>
+              </Transition>
 
               <p v-if="state.submitError" class="alert" role="alert">{{ state.submitError }}</p>
 
@@ -211,25 +228,34 @@ const stepTitle = computed(
 .main { display: grid; gap: 1.5rem; min-width: 0; }
 
 .stepper { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
-.stepper button { display: grid; gap: 0.15rem; width: 100%; text-align: left; padding: 0.8rem 0.9rem; background: #fff; border: 0; border-radius: 16px; box-shadow: inset 0 0 0 1.5px rgba(42, 21, 32, 0.12); cursor: pointer; min-height: 44px; transition: all 0.25s var(--ease); }
+.stepper button { display: grid; gap: 0.15rem; width: 100%; text-align: left; padding: 0.8rem 0.9rem; background: #fff; border: 0; border-radius: 16px; box-shadow: inset 0 0 0 1.5px rgba(24, 19, 16, 0.12); cursor: pointer; min-height: 44px; transition: all 0.25s var(--ease); }
 .stepper button:disabled { cursor: not-allowed; opacity: 0.5; }
-.stepper .current button { background: var(--grad-btn); box-shadow: var(--shadow); color: #fff; }
+.stepper .current button { background: var(--grad-btn); box-shadow: var(--shadow); color: #fff; transform: translateY(-2px); }
+.stepper button:hover:not(:disabled) { transform: translateY(-2px); }
 .stepper .done button { box-shadow: inset 0 0 0 1.5px var(--copper); }
 .n { font-family: var(--font-display); font-size: 1.15rem; color: var(--copper); }
 .current .n { color: #fff; }
 .l { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.03em; line-height: 1.2; }
 
+.track { position: relative; height: 4px; margin-top: -0.5rem; border-radius: 4px; background: rgba(24, 19, 16, 0.1); overflow: hidden; }
+.track i { position: absolute; inset: 0; border-radius: 4px; background: var(--grad); transform-origin: left; transition: transform 0.7s var(--ease); }
+.step-fwd-enter-active, .step-back-enter-active { transition: opacity 0.45s var(--ease), transform 0.45s var(--ease); }
+.step-fwd-leave-active, .step-back-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
+.step-fwd-enter-from { opacity: 0; transform: translate3d(36px, 0, 0); }
+.step-fwd-leave-to { opacity: 0; transform: translate3d(-24px, 0, 0); }
+.step-back-enter-from { opacity: 0; transform: translate3d(-36px, 0, 0); }
+.step-back-leave-to { opacity: 0; transform: translate3d(24px, 0, 0); }
 .panel { display: grid; gap: 1.6rem; padding: clamp(1.3rem, 4vw, 2.6rem); background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
 .step-title { font-size: clamp(1.6rem, 3.6vw, 2.3rem); scroll-margin-top: calc(var(--header-h) + 12px); }
 .step-title:focus { outline: none; }
 .insp-note { font-size: 0.95rem; padding: 0.7rem 1rem; background: var(--grad-soft); border-radius: 14px; }
 .linkish { background: none; border: 0; padding: 0 0 0 0.6rem; text-decoration: underline; cursor: pointer; color: var(--copper); }
 
-.nav { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: space-between; padding-top: 1.4rem; border-top: 1px solid rgba(42, 21, 32, 0.1); }
+.nav { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: space-between; padding-top: 1.4rem; border-top: 1px solid rgba(24, 19, 16, 0.1); }
 .nav .btn-primary:only-child, .nav .btn-copper:only-child { margin-left: auto; }
 
 .review dl, .summary dl { margin: 0; }
-.review dl > div, .summary dl > div { display: flex; justify-content: space-between; gap: 1.5rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(42, 21, 32, 0.1); }
+.review dl > div, .summary dl > div { display: flex; justify-content: space-between; gap: 1.5rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(24, 19, 16, 0.1); }
 .review dl { margin-bottom: 1.2rem; }
 dt { color: var(--muted); font-size: 0.92rem; }
 dd { margin: 0; font-weight: 600; text-align: right; min-width: 0; overflow-wrap: anywhere; }

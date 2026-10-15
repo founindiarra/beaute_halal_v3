@@ -16,8 +16,8 @@ const failed = ref(false)
 <template>
   <section class="cta-band">
     <div class="container">
-      <div class="card on-dark" v-reveal>
-        <img v-if="!failed" class="bg" :src="heroImages.cta" alt="" loading="lazy" decoding="async" @error="failed = true" />
+      <div class="card on-dark" v-reveal.zoom>
+        <img v-if="!failed" v-parallax="0.07" class="bg" :src="heroImages.cta" alt="" loading="lazy" decoding="async" @error="failed = true" />
         <div class="veil" aria-hidden="true" />
         <div class="grid">
           <div class="lead">
@@ -25,7 +25,7 @@ const failed = ref(false)
             <h2>{{ title }}</h2>
             <p class="lede">{{ text }}</p>
             <div class="cta">
-              <RouterLink :to="{ name: 'booking' }" class="btn btn-primary">Prendre rendez-vous</RouterLink>
+              <RouterLink :to="{ name: 'booking' }" v-magnetic class="btn btn-primary btn-glow">Prendre rendez-vous</RouterLink>
               <a v-if="hasWhatsapp" :href="whatsappLink()" class="btn btn-outline" target="_blank" rel="noopener noreferrer">WhatsApp<span class="sr-only"> (nouvel onglet)</span></a>
             </div>
           </div>
@@ -48,8 +48,8 @@ const failed = ref(false)
 <style scoped>
 .cta-band { padding-block: clamp(2rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem); }
 .card { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-lg); padding: clamp(1.8rem, 5vw, 4rem); box-shadow: var(--shadow-lift); }
-.bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
-.veil { position: absolute; inset: 0; z-index: -1; background: linear-gradient(100deg, rgba(42, 21, 32, 0.95) 0%, rgba(107, 35, 71, 0.8) 55%, rgba(232, 88, 127, 0.45) 100%); }
+.bg { position: absolute; left: 0; top: -12%; z-index: -2; width: 100%; height: 124%; object-fit: cover; object-position: center 40%; }
+.veil { position: absolute; inset: 0; z-index: -1; background: linear-gradient(100deg, rgba(24, 19, 16, 0.95) 0%, rgba(74, 54, 36, 0.8) 55%, rgba(201, 162, 39, 0.45) 100%); }
 .grid { display: grid; gap: 2.5rem; }
 .lead { display: grid; gap: 1.2rem; align-content: start; }
 .lead h2 { color: #fff; }

@@ -133,7 +133,7 @@ const anySlot = computed(() => slots.value.some((s) => s.available))
 .wd { text-align: center; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-bottom: 0.4rem; }
 .day { aspect-ratio: 1; min-height: 44px; border: 1.5px solid var(--line); border-radius: 50%; background: #fff; font-weight: 600; font-size: 0.98rem; cursor: pointer; transition: all 0.15s; }
 .day:hover:not(:disabled) { border-color: var(--copper); color: var(--copper); }
-.day:disabled { background: transparent; border-color: transparent; color: rgba(42, 21, 32, 0.32); cursor: not-allowed; font-weight: 400; }
+.day:disabled { background: transparent; border-color: transparent; color: rgba(24, 19, 16, 0.32); cursor: not-allowed; font-weight: 400; }
 .day.on { background: var(--grad-btn); color: #fff; border-color: transparent; box-shadow: var(--shadow); }
 .legend { margin-top: 0.9rem; font-size: 0.85rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
 .sw { width: 14px; height: 14px; background: #fff; border: 1.5px solid var(--line-strong); border-radius: 50%; }
@@ -142,7 +142,7 @@ const anySlot = computed(() => slots.value.some((s) => s.available))
 .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
 .slot { min-height: 52px; font-weight: 600; font-size: 1rem; background: #fff; border: 1.5px solid var(--line-strong); border-radius: 999px; cursor: pointer; transition: all 0.2s; }
 .slot:hover:not(:disabled) { border-color: var(--copper); color: var(--copper); }
-.slot:disabled { color: rgba(42, 21, 32, 0.32); text-decoration: line-through; border-color: var(--line); background: transparent; cursor: not-allowed; }
+.slot:disabled { color: rgba(24, 19, 16, 0.32); text-decoration: line-through; border-color: var(--line); background: transparent; cursor: not-allowed; }
 .slot.on { background: var(--grad-btn); border-color: transparent; color: #fff; }
 .hint { color: var(--muted); }
 @media (min-width: 640px) { .slot-grid { grid-template-columns: repeat(4, 1fr); } }

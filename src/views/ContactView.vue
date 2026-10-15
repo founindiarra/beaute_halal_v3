@@ -99,7 +99,7 @@ const hasInfo = computed(
 .grid { display: grid; gap: 2rem; align-items: start; }
 .info, .form-col { padding: clamp(1.4rem, 4vw, 2.4rem); background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
 .list { display: grid; margin: 0; }
-.list > div { display: grid; gap: 0.3rem; padding-block: 1.1rem; border-bottom: 1px solid rgba(42, 21, 32, 0.1); }
+.list > div { display: grid; gap: 0.3rem; padding-block: 1.1rem; border-bottom: 1px solid rgba(24, 19, 16, 0.1); }
 .list > div:first-child { padding-top: 0; }
 .list > div:last-child { border-bottom: 0; padding-bottom: 0; }
 dt { font-size: 0.76rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--copper); }

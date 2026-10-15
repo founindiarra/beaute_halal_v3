@@ -41,7 +41,7 @@ const submit = async () => {
 
 <template>
   <div v-if="sent" class="alert alert-ok" role="status">
-    <p><strong>Message envoyé.</strong> Merci, le salon vous répondra par e-mail ou par téléphone.</p>
+    <p class="sent"><span class="mini-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg></span><span><strong>Message envoyé.</strong> Merci, le salon vous répondra par e-mail ou par téléphone.</span></p>
     <button type="button" class="btn btn-outline btn-sm" style="margin-top: 0.9rem" @click="sent = false">Envoyer un autre message</button>
   </div>
 
@@ -63,6 +63,12 @@ const submit = async () => {
 
 <style scoped>
 .contact-form { display: grid; gap: 1.2rem; }
+.sent { display: flex; align-items: flex-start; gap: 0.8rem; }
+.mini-tick { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #2e8b57; animation: pop 0.6s var(--ease) both; }
+.mini-tick svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.mini-tick path { stroke-dasharray: 24; stroke-dashoffset: 24; animation: draw 0.5s 0.35s var(--ease) forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes pop { from { opacity: 0; transform: scale(0.4); } 60% { transform: scale(1.12); } }
 .two { display: grid; gap: 1.2rem; }
 @media (min-width: 640px) { .two { grid-template-columns: 1fr 1fr; } }
 </style>

@@ -13,6 +13,9 @@ const message = () =>
 
 <template>
   <div class="ok" role="status">
+    <span class="tick" aria-hidden="true">
+      <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23" /><path d="M15 27l8 8 14-16" /></svg>
+    </span>
     <p class="eyebrow">Demande enregistrée</p>
     <h2>Merci{{ confirmation.firstName ? `, ${confirmation.firstName}` : '' }}. Votre demande est <em>bien reçue</em>.</h2>
     <p class="lede">
@@ -37,6 +40,20 @@ const message = () =>
 </template>
 
 <style scoped>
+.tick { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; background: var(--grad-soft); animation: pop 0.7s var(--ease) both; box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.35), var(--shadow); }
+.tick svg { width: 56px; height: 56px; fill: none; stroke: var(--copper); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.tick circle { stroke-dasharray: 145; stroke-dashoffset: 145; animation: draw 0.9s 0.2s var(--ease) forwards; }
+.tick path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw 0.5s 0.9s var(--ease) forwards; }
+.ok > :not(.tick) { animation: rise 0.8s var(--ease) both; }
+.ok > :nth-child(2) { animation-delay: 0.5s; }
+.ok > :nth-child(3) { animation-delay: 0.6s; }
+.ok > :nth-child(4) { animation-delay: 0.7s; }
+.ok > :nth-child(5) { animation-delay: 0.8s; }
+.ok > :nth-child(6) { animation-delay: 0.9s; }
+.ok > :nth-child(7) { animation-delay: 1s; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes pop { from { opacity: 0; transform: scale(0.5); } 60% { transform: scale(1.08); } }
+@keyframes rise { from { opacity: 0; transform: translate3d(0, 18px, 0); } }
 .ok { display: grid; gap: 1.5rem; max-width: 46rem; margin-inline: auto; padding: clamp(1.5rem, 5vw, 3rem); background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lift); }
 .recap { margin: 0.5rem 0 0; border-top: 1px solid var(--line); }
 .recap > div { display: flex; justify-content: space-between; gap: 1.5rem; padding: 0.9rem 0; border-bottom: 1px solid var(--line); }

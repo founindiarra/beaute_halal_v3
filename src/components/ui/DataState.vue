@@ -19,6 +19,7 @@ defineEmits(['retry'])
   <div v-if="loading" class="ds" :style="{ minHeight }" role="status" aria-live="polite">
     <span class="spinner" aria-hidden="true" />
     <span>{{ loadingLabel }}</span>
+    <span class="sk" aria-hidden="true"><i /><i /><i /></span>
   </div>
   <div v-else-if="error" class="ds ds-error" role="alert">
     <p>{{ error }}</p>
@@ -32,5 +33,10 @@ defineEmits(['retry'])
 
 <style scoped>
 .ds { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 2.5rem 1rem; text-align: center; color: var(--muted); }
-.ds-error { color: var(--ink); border: 1.5px dashed rgba(42, 21, 32, 0.25); border-radius: var(--radius-lg); }
+.sk { display: grid; gap: 0.6rem; width: min(22rem, 80%); }
+.sk i { display: block; height: 0.8rem; border-radius: 999px; background: linear-gradient(90deg, rgba(24, 19, 16, 0.07) 25%, rgba(201, 162, 39, 0.18) 50%, rgba(24, 19, 16, 0.07) 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+.sk i:nth-child(2) { width: 80%; }
+.sk i:nth-child(3) { width: 55%; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+.ds-error { color: var(--ink); border: 1.5px dashed rgba(24, 19, 16, 0.25); border-radius: var(--radius-lg); }
 </style>
