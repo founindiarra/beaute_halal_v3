@@ -9,6 +9,9 @@ import App from './App.vue'
 import router from './router'
 import { magnetic, parallax, tilt } from './directives/motion'
 import { reveal } from './directives/reveal'
+import { syncTarifs } from './services/tarifsSync'
+
+await syncTarifs()
 
 createApp(App)
   .use(router)

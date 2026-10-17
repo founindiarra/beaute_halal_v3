@@ -6,23 +6,23 @@
 
 export const values = [
   {
-    title: 'Le geste d’abord',
-    text: 'Des locks réguliers tiennent à la précision : racine nette, tension juste, mèches homogènes.',
+    title: 'Racines ET tiges',
+    text: 'Chaque resserrage complet inclut le travail des racines et des tiges jusqu’à la maturation complète de vos locks, environ 2 ans. C’est notre signature.',
   },
   {
-    title: 'Une écoute attentive',
-    text: 'Chaque tête est différente. Le commentaire de votre demande nous aide à préparer votre venue.',
+    title: 'Des tarifs transparents',
+    text: 'Le tarif dépend du type de locks, du volume de vos cheveux et du délai depuis votre dernière séance. Il vous est annoncé avant le début de la prestation.',
   },
   {
-    title: 'Des informations claires',
-    text: 'Durées et tarifs sont affichés sur chaque prestation, avant que vous ne demandiez un créneau.',
+    title: 'Le respect de vos locks',
+    text: 'Resserrer dans les délais (2 mois, 6 semaines pour les micro-locks) préserve leur santé et vous garantit le tarif standard.',
   },
 ]
 
 /** Déroulé réel du parcours de demande en ligne. */
 export const process = [
-  { title: 'Choisissez', text: 'Une prestation parmi celles du salon, avec sa durée et son tarif.' },
-  { title: 'Sélectionnez', text: 'Une date puis un créneau réellement disponible, mis à jour en direct.' },
-  { title: 'Renseignez', text: 'Nom, téléphone et e-mail, et un commentaire si vous le souhaitez.' },
-  { title: 'Recevez', text: 'Une référence de demande. Le salon vous confirme ensuite le rendez-vous.' },
+  { title: 'Identifiez', text: 'Votre type de locks (traditionnels, small ou micro) et votre volume, de XS à XL.' },
+  { title: 'Estimez', text: 'Le tarif indicatif selon la formule, le délai depuis votre dernière séance et l’état de vos locks.' },
+  { title: 'Réservez', text: 'Création complète ou resserrage, votre type de locks et votre volume, puis vos informations.' },
+  { title: 'Confirmez', text: 'Le salon confirme votre rendez-vous et annonce le tarif final avant la prestation.' },
 ]

@@ -1,6 +1,8 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
+import { PRESTATIONS, inferType } from '@/data/tarifs'
+
 const props = defineProps({
   items: { type: Array, required: true },
   index: { type: Number, required: true },
@@ -8,6 +10,7 @@ const props = defineProps({
 const emit = defineEmits(['close', 'update:index', 'book'])
 
 const item = computed(() => props.items[props.index])
+const typeName = computed(() => inferType(`${item.value.title} ${item.value.description ?? ''}`)?.name ?? '')
 const dialog = ref(null)
 const closeBtn = ref(null)
 let previouslyFocused = null
@@ -75,9 +78,12 @@ const onTouchEnd = (e) => {
       <figure>
         <img :key="item.id" :src="item.imageUrl" :alt="item.title" :style="{ '--dir': `${dir * 36}px` }" />
         <figcaption :key="item.id">
-          <p class="count">{{ index + 1 }} / {{ items.length }}<template v-if="item.category?.name"> · {{ item.category.name }}</template></p>
+          <p class="count">{{ index + 1 }} / {{ items.length }}<template v-if="typeName"> · {{ typeName }}</template></p>
           <h2>{{ item.title }}</h2>
           <p v-if="item.description" class="desc">{{ item.description }}</p>
+          <ul class="prestas" aria-label="Prestations disponibles">
+            <li v-for="p in PRESTATIONS" :key="p.id"><strong>{{ p.name }}</strong><template v-if="typeName"> · {{ typeName }}</template><span>{{ p.description }}</span></li>
+          </ul>
           <button type="button" class="btn btn-primary btn-sm" @click="$emit('book', item)">Réserver cette coiffure</button>
         </figcaption>
       </figure>
@@ -97,6 +103,10 @@ figcaption { display: grid; gap: 0.5rem; justify-items: start; }
 figcaption h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); }
 .count { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--caramel); font-weight: 600; }
 .desc { color: var(--on-dark-muted); max-width: 60ch; }
+.prestas { display: grid; gap: 0.6rem; padding: 0; list-style: none; max-width: 60ch; }
+.prestas li { display: grid; gap: 0.1rem; font-size: 0.9rem; padding-left: 0.8rem; border-left: 2px solid var(--caramel); }
+.prestas strong { color: var(--ivory); }
+.prestas span { color: var(--on-dark-muted); }
 .nav { position: fixed; bottom: 0.8rem; width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid rgba(246, 243, 235, 0.5); background: rgba(18, 14, 12, 0.85); color: var(--ivory); cursor: pointer; font-size: 1.2rem; z-index: 2; }
 .nav:hover { background: var(--ivory); color: var(--ink); }
 .prev { right: 4.6rem; }
@@ -105,6 +115,7 @@ figcaption > * { animation: capIn 0.7s var(--ease) both; }
 figcaption > :nth-child(2) { animation-delay: 0.06s; }
 figcaption > :nth-child(3) { animation-delay: 0.12s; }
 figcaption > :nth-child(4) { animation-delay: 0.18s; }
+figcaption > :nth-child(5) { animation-delay: 0.24s; }
 .nav, .close { transition: background-color 0.25s, color 0.25s, transform 0.3s var(--ease); }
 .nav:hover { transform: scale(1.1); }
 .close:hover { transform: rotate(90deg); }

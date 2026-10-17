@@ -1,5 +1,6 @@
 import { computed, reactive } from 'vue'
 
+import { WHATSAPP } from '@/data/tarifs'
 import { fetchSalon } from '@/services/api'
 import { applySalonJsonLd } from '@/utils/seo'
 
@@ -66,7 +67,7 @@ export async function loadSalon({ force = false } = {}) {
 export function useSalon() {
   loadSalon()
   const salon = computed(() => state.salon)
-  const waNumber = computed(() => (state.salon.whatsapp?.number || '').replace(/\D/g, ''))
+  const waNumber = computed(() => (state.salon.whatsapp?.number || WHATSAPP.number).replace(/\D/g, ''))
 
   /** Lien WhatsApp, ou null tant que le salon n'a pas renseigné son numéro. */
   const whatsappLink = (message) => {

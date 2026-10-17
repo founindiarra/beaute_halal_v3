@@ -13,6 +13,7 @@ const props = defineProps({
   inputmode: { type: String, default: undefined },
   maxlength: { type: Number, default: undefined },
   max: { type: String, default: undefined },
+  min: { type: String, default: undefined },
   placeholder: { type: String, default: undefined },
   rows: { type: Number, default: 5 },
 })
@@ -36,6 +37,7 @@ const describedBy = computed(() => [props.error && `${id}-err`, props.hint && `$
       :inputmode="inputmode"
       :maxlength="maxlength"
       :max="max"
+      :min="min"
       :placeholder="placeholder"
       :aria-invalid="error ? 'true' : undefined"
       :aria-describedby="describedBy"

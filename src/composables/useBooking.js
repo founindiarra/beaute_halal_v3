@@ -1,17 +1,22 @@
 import { computed, reactive } from 'vue'
 
-import { createAppointment } from '@/services/api'
-import { toDateKey } from '@/utils/date'
+import { buildRequestMessage, findType } from '@/data/tarifs'
+import { createBookingRequest, sendContactMessage } from '@/services/api'
 
-/** Étapes : la date et le créneau forment un seul écran, l'API n'en demande pas plus. */
+/**
+ * Nouvelle logique : pas de créneau horaire. La cliente choisit d'abord « création complète » ou « resserrage »,
+ * renseigne les critères correspondants, ses coordonnées et un jour souhaité ; le salon confirme ensuite le jour
+ * et l'heure par téléphone ou WhatsApp.
+ */
 export const STEPS = [
-  { id: 1, label: 'Prestation' },
-  { id: 2, label: 'Date et heure' },
-  { id: 3, label: 'Vos informations' },
-  { id: 4, label: 'Récapitulatif' },
+  { id: 1, label: 'Votre besoin' },
+  { id: 2, label: 'Vos informations' },
+  { id: 3, label: 'Récapitulatif' },
 ]
 
-const emptyCustomer = () => ({ firstName: '', lastName: '', phone: '', email: '', birthDate: '', note: '' })
+const emptyResserrage = () => ({ type: '', volume: '', formule: 'complet', delai: 'standard', etat: 'bon' })
+const emptyCreation = () => ({ type: '', volume: '', longueur: '' })
+const emptyCustomer = () => ({ firstName: '', lastName: '', phone: '', email: '', birthDate: '', desiredDate: '', note: '' })
 
 export const validateCustomer = (c) => {
   const errors = {}
@@ -22,36 +27,53 @@ export const validateCustomer = (c) => {
   return errors
 }
 
-/**
- * État partagé du parcours (niveau module) : une carte « Réserver » peut
- * présélectionner la prestation avant l'arrivée sur /rendez-vous, et les choix
- * survivent à un aller-retour dans la navigation.
- * Les coordonnées ne sont jamais écrites dans le stockage du navigateur.
- */
+/** État partagé du parcours (niveau module). Les coordonnées ne sont jamais écrites dans le stockage du navigateur. */
 const state = reactive({
   step: 1,
-  service: null,
-  date: null, // Date
-  time: null, // « HH:MM »
+  /** '' | 'creation' | 'resserrage' */
+  besoin: '',
+  resserrage: emptyResserrage(),
+  creation: emptyCreation(),
   customer: emptyCustomer(),
   inspiration: null,
   confirmation: null,
   submitting: false,
   submitError: null,
-  /** Incrémenté pour recharger les disponibilités après un conflit de créneau. */
-  availabilityVersion: 0,
 })
 
-const MENTION = /Coiffure souhaitée : «[^»]*».*?(\n|$)/g
+export function setBesoin(besoin) {
+  state.besoin = besoin
+  state.submitError = null
+}
+export function setResserrage(patch) {
+  Object.assign(state.resserrage, patch)
+  state.submitError = null
+}
+export function clearResserrage() {
+  Object.assign(state.resserrage, emptyResserrage())
+}
+export function setDesiredDate(value) {
+  state.customer.desiredDate = value
+  state.submitError = null
+}
+export function setCreation(patch) {
+  Object.assign(state.creation, patch)
+  state.submitError = null
+}
+export function clearCreation() {
+  Object.assign(state.creation, emptyCreation())
+}
 
 export function useBooking() {
-  const dateKey = computed(() => (state.date ? toDateKey(state.date) : null))
-
   const isStepValid = (step) => {
-    if (step === 1) return Boolean(state.service)
-    if (step === 2) return Boolean(state.date && state.time)
-    if (step === 3) return Object.keys(validateCustomer(state.customer)).length === 0
-    return step === 4
+    if (step === 1) {
+      if (!state.customer.desiredDate) return false
+      if (state.besoin === 'creation') return Boolean(state.creation.type)
+      if (state.besoin === 'resserrage') return Boolean(state.resserrage.type)
+      return false
+    }
+    if (step === 2) return Object.keys(validateCustomer(state.customer)).length === 0
+    return step === 3
   }
 
   const maxReachedStep = computed(() => {
@@ -60,26 +82,8 @@ export function useBooking() {
     return s
   })
 
-  const selectService = (service) => {
-    if (state.service?.slug !== service?.slug) {
-      state.service = service
-      state.date = null
-      state.time = null
-    }
-    state.submitError = null
-  }
-  const selectDate = (date) => {
-    state.date = date
-    state.time = null
-    state.submitError = null
-  }
-  const selectTime = (time) => {
-    state.time = time
-    state.submitError = null
-  }
   const goToStep = (step) => {
-    if (step < 1 || step > STEPS.length) return
-    if (step > maxReachedStep.value) return
+    if (step < 1 || step > STEPS.length || step > maxReachedStep.value) return
     state.step = step
   }
   const next = () => {
@@ -89,32 +93,61 @@ export function useBooking() {
     if (state.step > 1) state.step -= 1
   }
 
-  /** Envoie la demande ; ne simule jamais un succès. Renvoie { ok, conflict }. */
+  /** Envoie la demande au salon (POST /contact, route réelle du backend commun) ; ne simule jamais un succès. */
   const confirmBooking = async () => {
-    if (state.submitting) return { ok: false, conflict: false }
-    if (!state.service || !state.date || !state.time) {
-      state.submitError = 'Votre sélection est incomplète.'
-      return { ok: false, conflict: false }
+    if (state.submitting) return { ok: false }
+    if (!isStepValid(1) || !isStepValid(2)) {
+      state.submitError = 'Votre demande est incomplète.'
+      return { ok: false }
     }
     state.submitting = true
     state.submitError = null
+    const message = buildRequestMessage(state)
+    const c = state.customer
+    const isCreation = state.besoin === 'creation'
+    const r = isCreation ? state.creation : state.resserrage
+    const payload = {
+      besoin: state.besoin,
+      type: r.type,
+      volume: r.volume || '',
+      ...(isCreation ? { longueur: r.longueur || '' } : { formule: r.formule, delai: r.delai, etat: r.etat }),
+      desiredDate: c.desiredDate,
+      inspiration: state.inspiration?.title
+        ? { id: Number(state.inspiration.id) || null, title: state.inspiration.title }
+        : null,
+      firstName: c.firstName.trim(),
+      lastName: c.lastName.trim(),
+      phone: c.phone.trim(),
+      email: c.email.trim(),
+      birthDate: c.birthDate || null,
+      note: c.note?.trim() || null,
+    }
     try {
-      state.confirmation = await createAppointment({
-        serviceSlug: state.service.slug,
-        date: toDateKey(state.date),
-        time: state.time,
-        ...state.customer,
-      })
-      return { ok: true, conflict: false }
-    } catch (error) {
-      state.submitError = error?.message || 'La demande n’a pas pu être enregistrée.'
-      if (error?.isConflict) {
-        state.time = null
-        state.step = 2
-        state.availabilityVersion += 1
-        return { ok: false, conflict: true }
+      let reference = null
+      try {
+        reference = (await createBookingRequest(payload))?.reference ?? null
+      } catch (error) {
+        /* Serveur plus ancien (route absente) : la demande part comme un message de contact. */
+        if (error?.status !== 404) throw error
+        await sendContactMessage({
+          name: `${c.firstName.trim()} ${c.lastName.trim()}`,
+          email: c.email,
+          phone: c.phone,
+          message,
+        })
       }
-      return { ok: false, conflict: false }
+      state.confirmation = {
+        reference,
+        firstName: state.customer.firstName.trim(),
+        besoin: state.besoin,
+        message,
+        desiredDate: state.customer.desiredDate,
+        type: findType(state.besoin === 'creation' ? state.creation.type : state.resserrage.type)?.name ?? null,
+      }
+      return { ok: true }
+    } catch (error) {
+      state.submitError = error?.message || 'La demande n’a pas pu être envoyée.'
+      return { ok: false }
     } finally {
       state.submitting = false
     }
@@ -123,9 +156,9 @@ export function useBooking() {
   const reset = () => {
     Object.assign(state, {
       step: 1,
-      service: null,
-      date: null,
-      time: null,
+      besoin: '',
+      resserrage: emptyResserrage(),
+      creation: emptyCreation(),
       customer: emptyCustomer(),
       inspiration: null,
       confirmation: null,
@@ -134,41 +167,18 @@ export function useBooking() {
     })
   }
 
-  return { state, steps: STEPS, dateKey, isStepValid, maxReachedStep, selectService, selectDate, selectTime, goToStep, next, previous, confirmBooking, reset }
+  return { state, steps: STEPS, isStepValid, maxReachedStep, goToStep, next, previous, confirmBooking, reset }
 }
 
-export function preselectService(service) {
-  state.service = service ?? null
-  state.date = null
-  state.time = null
-  state.confirmation = null
-  state.submitError = null
-  state.inspiration = null
-  state.step = service ? 2 : 1
-}
-
-/** Départ depuis une coiffure : le titre suit la demande jusqu'au salon via le commentaire. */
+/** Départ depuis une coiffure : la coiffure accompagne la demande jusqu'au salon. */
 export function preselectFromGallery(item) {
   if (!item) return
-  state.service = item.service ?? null
-  state.date = null
-  state.time = null
   state.confirmation = null
   state.submitError = null
-  state.inspiration = {
-    id: item.id,
-    title: item.title,
-    imageUrl: item.imageUrl,
-    category: item.category ?? null,
-    service: item.service ?? null,
-  }
-  state.step = item.service ? 2 : 1
-  const mention = `Coiffure souhaitée : « ${item.title} » (vue dans Nos coiffures).`
-  const rest = state.customer.note.replace(MENTION, '').trim()
-  state.customer.note = rest ? `${mention}\n${rest}` : mention
+  state.step = 1
+  state.inspiration = { id: item.id, title: item.title, description: item.description ?? '', imageUrl: item.imageUrl }
 }
 
 export function clearInspiration() {
   state.inspiration = null
-  state.customer.note = state.customer.note.replace(MENTION, '').trim()
 }

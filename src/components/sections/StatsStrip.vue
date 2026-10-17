@@ -1,24 +1,22 @@
 <script setup>
-/* Chiffres réels du salon, tirés de l'API (aucun chiffre inventé).
+/* Chiffres calculés : types et prestations (grille du salon), coiffures et note moyenne (API). Aucun chiffre inventé.
    Une statistique sans valeur n'est pas affichée ; moins de deux : la bande disparaît. */
 import { computed } from 'vue'
 
 import CountUp from '@/components/ui/CountUp.vue'
 import { useApiData } from '@/composables/useApiData'
-import { useSalon } from '@/composables/useSalon'
-import { fetchGalleryItems, fetchServices, fetchTestimonials } from '@/services/api'
+import { LOCK_TYPES, PRESTATIONS } from '@/data/tarifs'
+import { fetchGalleryItems, fetchTestimonials } from '@/services/api'
 
-const { salon } = useSalon()
-const { data: services } = useApiData(fetchServices, [])
 const { data: gallery } = useApiData(() => fetchGalleryItems(), [])
 const { data: reviews } = useApiData(fetchTestimonials, { items: [], averageRating: 0 })
 
 const stats = computed(() => {
   const list = [
-    { value: services.value?.length ?? 0, label: 'prestations pour vos locks' },
+    { value: LOCK_TYPES.length, label: 'types de locks' },
+    { value: PRESTATIONS.length, label: 'prestations pour vos locks' },
     { value: (gallery.value ?? []).filter((i) => i.imageUrl).length, label: 'coiffures à découvrir' },
     { value: Number(reviews.value?.averageRating) || 0, decimals: 1, label: 'note moyenne sur 5' },
-    { value: Number(salon.value.bookingWindowDays) || 0, label: 'jours de créneaux ouverts' },
   ]
   return list.filter((s) => s.value > 0)
 })

@@ -20,4 +20,11 @@ export const heroImages = {
   cta: u('1662991859083-86e0b45208b0'), // locks cuivrés sur fond sombre
 }
 
+/** Photos des trois types de locks (cartes « Nos services »). Photos d'ambiance : remplaçables par les photos du salon. */
+export const typeImages = {
+  traditionnels: u('1635627091599-aedcf8241102', 900),
+  small: u('1676293038867-84ee4e09c24b', 900),
+  micro: u('1630488971092-ebf24950529f', 900),
+}
+
 export default heroImages

@@ -10,25 +10,19 @@ import PageHero from '@/components/ui/PageHero.vue'
 import { preselectFromGallery } from '@/composables/useBooking'
 import { useApiData } from '@/composables/useApiData'
 import { heroImages } from '@/data/heroImages'
-import { fetchGalleryCategories, fetchGalleryItems } from '@/services/api'
+import { LOCK_TYPES, PRESTATIONS, inferType } from '@/data/tarifs'
+import { fetchGalleryItems } from '@/services/api'
 
 const route = useRoute()
 const router = useRouter()
 
-const { data: cats } = useApiData(fetchGalleryCategories, [])
-/** Les catégories viennent de l'API ; « Toutes » n'est proposée que si l'API ne la fournit pas. */
-const categories = computed(() => {
-  const list = cats.value ?? []
-  return list.some((c) => c.slug === 'all') ? list : [{ slug: 'all', name: 'Toutes' }, ...list]
-})
-
-const active = ref('all')
-const { data, loading, error, reload } = useApiData((slug) => fetchGalleryItems({ category: slug }), [], { immediate: false })
+const { data, loading, error, reload } = useApiData(() => fetchGalleryItems(), [])
 const items = computed(() => (data.value ?? []).filter((i) => i.imageUrl))
-
-const load = () => reload(active.value)
-load()
-watch(active, load)
+const typeName = (item) =>
+  (item.typeId && LOCK_TYPES.find((t) => t.id === item.typeId)?.name) ||
+  inferType(`${item.title} ${item.description ?? ''}`)?.name ||
+  ''
+const load = () => reload()
 
 const current = ref(-1)
 const open = (i) => (current.value = i)
@@ -56,31 +50,18 @@ const book = (item) => {
 
 <template>
   <div>
-    <PageHero :image="heroImages.gallery" eyebrow="Nos coiffures" title="Les coiffures du salon." lede="Ouvrez une photo en grand, puis réservez directement la coiffure qui vous plaît.">
+    <PageHero :image="heroImages.gallery" eyebrow="Nos coiffures" title="Les coiffures du salon." lede="Ouvrez une photo en grand, puis demandez un rendez-vous pour la coiffure qui vous plaît : création complète ou resserrage.">
       <template #title>Les <em>coiffures</em> du salon.</template>
     </PageHero>
 
     <section class="section-tight">
       <div class="container">
-        <div v-if="categories.length > 2" class="filters" role="group" aria-label="Filtrer par catégorie">
-          <button
-            v-for="c in categories"
-            :key="c.slug"
-            type="button"
-            class="chip"
-            :aria-pressed="active === c.slug"
-            @click="active = c.slug"
-          >
-            {{ c.name }}
-          </button>
-        </div>
-
         <DataState
           :loading="loading"
           :error="error"
           :empty="!items.length"
           loading-label="Chargement des coiffures…"
-          empty-label="Aucune coiffure dans cette catégorie pour le moment."
+          empty-label="Les coiffures seront bientôt en ligne."
           min-height="24rem"
           @retry="load"
         >
@@ -89,13 +70,14 @@ const book = (item) => {
               <button type="button" class="card" :aria-label="`Agrandir la photo : ${item.title}`" @click="open(i)">
                 <span class="media">
                   <ApiImage :src="item.imageUrl" :alt="item.title" ratio="4 / 5" />
-                  <span v-if="item.category?.name" class="tag">{{ item.category.name }}</span>
+                  <span v-if="typeName(item)" class="tag">{{ typeName(item) }}</span>
                   <span class="zoom" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="20" height="20"><path d="M11 5v12M5 11h12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" /></svg>
                   </span>
                 </span>
                 <span class="body">
                   <span class="name">{{ item.title }}</span>
+                  <span class="presta">{{ PRESTATIONS.map((p) => p.name).join(' · ') }}</span>
                   <span class="more">Voir en grand <span aria-hidden="true">→</span></span>
                 </span>
               </button>
@@ -105,18 +87,13 @@ const book = (item) => {
       </div>
     </section>
 
-    <VisitBlock title="Une coiffure vous inspire ?" text="Ouvrez la photo, choisissez « Réserver cette coiffure » : son nom accompagne votre demande jusqu’au salon." />
+    <VisitBlock title="Une coiffure vous inspire ?" text="Ouvrez la photo, choisissez « Réserver cette coiffure », puis indiquez s’il s’agit d’une création complète ou d’un resserrage." />
 
     <Transition name="lb"><GalleryLightbox v-if="current >= 0 && items[current]" v-model:index="current" :items="items" @close="close" @book="book" /></Transition>
   </div>
 </template>
 
 <style scoped>
-.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
-.chip { min-height: 44px; padding: 0.4rem 1.2rem; font-weight: 700; font-size: 0.9rem; background: #fff; color: var(--ink); border: 1.5px solid rgba(24, 19, 16, 0.15); border-radius: 999px; cursor: pointer; transition: all 0.25s var(--ease); }
-.chip:hover { border-color: var(--copper); color: var(--copper); }
-.chip[aria-pressed='true'] { background: var(--grad-btn); border-color: transparent; color: #fff; transform: translateY(-2px); box-shadow: 0 12px 22px -12px rgba(122, 89, 38, 0.7); }
-.chip:active { transform: scale(0.96); }
 .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.9rem; }
 .card { display: flex; flex-direction: column; width: 100%; height: 100%; padding: 0.45rem; text-align: left; font: inherit; color: inherit; background: #fff; border: 0; border-radius: 28px; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease); }
 .card:hover, .card:focus-visible { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
@@ -129,8 +106,10 @@ const book = (item) => {
 .card:hover .zoom, .card:focus-visible .zoom { transform: scale(1.08) rotate(90deg); }
 .body { display: grid; gap: 0.25rem; padding: 0.85rem 0.7rem 0.8rem; }
 .name { font-family: var(--font-display); font-size: 1.12rem; font-weight: 600; line-height: 1.2; font-variation-settings: 'opsz' 36; }
+.presta { font-size: 0.78rem; line-height: 1.35; color: var(--muted); }
 .more { font-size: 0.82rem; font-weight: 700; color: var(--copper); transition: letter-spacing 0.4s var(--ease); }
-.card:hover .more { letter-spacing: 0.04em; }
+.card:hover .presta { font-size: 0.78rem; line-height: 1.35; color: var(--muted); }
+.more { letter-spacing: 0.04em; }
 /* Voile sombre + reflet au survol de la photo */
 .media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(24, 19, 16, 0.45)); opacity: 0; transition: opacity 0.5s var(--ease); pointer-events: none; }
 .card:hover .media::after, .card:focus-visible .media::after { opacity: 1; }

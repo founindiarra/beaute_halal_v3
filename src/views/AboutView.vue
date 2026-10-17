@@ -2,13 +2,14 @@
 import ProcessSection from '@/components/sections/ProcessSection.vue'
 import TeamSection from '@/components/sections/TeamSection.vue'
 import VisitBlock from '@/components/sections/VisitBlock.vue'
+import GoodToKnow from '@/components/sections/GoodToKnow.vue'
+import SignatureBand from '@/components/sections/SignatureBand.vue'
 import PageHero from '@/components/ui/PageHero.vue'
-import { useSalon } from '@/composables/useSalon'
 import { heroImages } from '@/data/heroImages'
 import { values } from '@/data/editorial'
+import { BRAND_INTRO } from '@/data/tarifs'
 import { pad2 } from '@/utils/format'
 
-const { salon } = useSalon()
 </script>
 
 <template>
@@ -16,17 +17,17 @@ const { salon } = useSalon()
     <PageHero
       :image="heroImages.about"
       eyebrow="À propos"
-      title="Un salon entièrement tourné vers les locks."
-      :lede="salon.shortDescription || 'Beauté Halal est un salon spécialisé dans les locks : de la création à l’entretien et aux soins.'"
+      title="L’art du soin capillaire texturé."
+      :lede="BRAND_INTRO"
     >
-      <template #title>Un salon entièrement tourné vers les <em>locks</em>.</template>
+      <template #title>L’art du soin capillaire <em>texturé</em>.</template>
     </PageHero>
 
     <section class="section">
       <div class="container grid">
         <div v-reveal.left class="intro">
           <p class="eyebrow">Notre approche</p>
-          <h2>Trois principes, <em>sans fioritures</em>.</h2>
+          <h2>Trois engagements, <em>sans fioritures</em>.</h2>
         </div>
         <ol class="values">
           <li v-for="(v, i) in values" :key="v.title" v-reveal.right="i * 110">
@@ -37,6 +38,8 @@ const { salon } = useSalon()
       </div>
     </section>
 
+    <SignatureBand />
+    <GoodToKnow />
     <TeamSection />
     <ProcessSection />
     <VisitBlock />

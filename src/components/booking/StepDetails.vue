@@ -43,6 +43,11 @@ onMounted(() => {
 
 const choisir = (v) => {
   parcours.value = v
+  if (v === 'connue') {
+    /* Cliente connue : ni date de naissance ni commentaire, seulement Prénom, Nom et E-mail. */
+    set('birthDate', '')
+    set('note', '')
+  }
   reconnue.value = null
   dernierNumero = ''
 }
@@ -131,8 +136,10 @@ watch(
           <FormField :model-value="customer.lastName" label="Nom" autocomplete="family-name" :error="errors.lastName" @update:model-value="set('lastName', $event)" />
         </div>
         <FormField :model-value="customer.email" label="E-mail" type="email" autocomplete="email" hint="La confirmation vous y est envoyée." :error="errors.email" @update:model-value="set('email', $event)" />
-        <FormField :model-value="customer.birthDate" label="Date de naissance" type="date" autocomplete="bday" optional :max="aujourdhui" hint="Pour vous souhaiter votre anniversaire. Vous pouvez laisser vide." :error="errors.birthDate" @update:model-value="set('birthDate', $event)" />
-        <FormField :model-value="customer.note" label="Commentaire" textarea optional :maxlength="500" hint="Longueur de vos locks, souhait particulier…" @update:model-value="set('note', $event)" />
+        <template v-if="parcours === 'nouvelle'">
+          <FormField :model-value="customer.birthDate" label="Date de naissance" type="date" autocomplete="bday" optional :max="aujourdhui" hint="Pour vous souhaiter votre anniversaire. Vous pouvez laisser vide." :error="errors.birthDate" @update:model-value="set('birthDate', $event)" />
+          <FormField :model-value="customer.note" label="Commentaire" textarea optional :maxlength="500" hint="Longueur de vos locks, souhait particulier…" @update:model-value="set('note', $event)" />
+        </template>
         <p class="privacy">Vos informations servent uniquement à traiter votre demande de rendez-vous.</p>
       </template>
     </template>

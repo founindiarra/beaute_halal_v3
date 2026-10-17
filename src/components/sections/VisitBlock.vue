@@ -6,10 +6,10 @@ import { heroImages } from '@/data/heroImages'
 
 defineProps({
   title: { type: String, default: 'Prête pour de beaux locks ?' },
-  text: { type: String, default: 'Choisissez votre service et un créneau disponible. Le salon vous confirme ensuite votre rendez-vous.' },
+  text: { type: String, default: 'Choisissez création complète ou resserrage, puis envoyez votre demande. Le salon vous confirme le jour et l’heure.' },
 })
 
-const { salon, hours, hasWhatsapp, whatsappLink } = useSalon()
+const { salon, hasWhatsapp, whatsappLink } = useSalon()
 const failed = ref(false)
 </script>
 
@@ -29,10 +29,7 @@ const failed = ref(false)
               <a v-if="hasWhatsapp" :href="whatsappLink()" class="btn btn-outline" target="_blank" rel="noopener noreferrer">WhatsApp<span class="sr-only"> (nouvel onglet)</span></a>
             </div>
           </div>
-          <div v-if="hours.length || salon.address.city || salon.phone.display" class="info">
-            <dl v-if="hours.length" class="hours">
-              <div v-for="h in hours" :key="h.day"><dt>{{ h.day }}</dt><dd>{{ h.value }}</dd></div>
-            </dl>
+          <div v-if="salon.address.city || salon.phone.display" class="info">
             <address v-if="salon.address.city">
               {{ [salon.address.line1, salon.address.line2].filter(Boolean).join(', ') }}<br v-if="salon.address.line1 || salon.address.line2" />
               {{ salon.address.city }}
@@ -55,9 +52,6 @@ const failed = ref(false)
 .lead h2 { color: #fff; }
 .cta { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 0.4rem; }
 .info { display: grid; gap: 1.4rem; align-content: start; padding: 1.4rem; border-radius: 22px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); }
-.hours > div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.16); font-size: 0.95rem; }
-.hours dt { color: var(--on-dark-muted); }
-.hours dd { margin: 0; text-align: right; }
 address { font-style: normal; color: var(--on-dark-muted); }
 .tel { font-family: var(--font-display); font-size: 1.6rem; text-decoration: none; color: var(--caramel); width: fit-content; }
 @media (min-width: 900px) { .grid { grid-template-columns: 1.3fr 1fr; gap: 3.5rem; align-items: center; } }

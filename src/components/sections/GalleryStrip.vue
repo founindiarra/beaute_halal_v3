@@ -8,11 +8,9 @@ import { useApiData } from '@/composables/useApiData'
 import { fetchGalleryItems } from '@/services/api'
 
 const router = useRouter()
-const { data, loading, error, reload } = useApiData(async () => {
-  const featured = await fetchGalleryItems({ featured: true })
-  return featured.length >= 3 ? featured : await fetchGalleryItems()
-}, [])
-const items = computed(() => (data.value ?? []).filter((i) => i.imageUrl).slice(0, 5))
+/* Les mêmes coiffures que la page « Nos coiffures ». */
+const { data, loading, error, reload } = useApiData(() => fetchGalleryItems(), [])
+const items = computed(() => (data.value ?? []).filter((i) => i.imageUrl))
 /* Une seule ligne qui défile : la liste est répétée pour remplir la largeur, puis le groupe est dupliqué
    (copie masquée aux lecteurs d'écran) pour une boucle sans saut. */
 const group = computed(() => {

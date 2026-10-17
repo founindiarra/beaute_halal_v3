@@ -1,10 +1,9 @@
 <script setup>
 import { computed, ref } from 'vue'
 
-import { useSalon } from '@/composables/useSalon'
 import { heroImages } from '@/data/heroImages'
+import { BRAND_INTRO, BRAND_TAGLINE } from '@/data/tarifs'
 
-const { salon, loaded } = useSalon()
 /* Photo d'accueil : si le salon dépose sa propre photo dans /public/images/hero-accueil-v3.jpg,
    elle est utilisée en priorité ; sinon (ou si elle ne se charge pas) la photo d'ambiance distante. */
 const sources = ['/images/hero-accueil-v3.jpg', heroImages.home]
@@ -14,37 +13,33 @@ const next = () => { idx.value += 1 }
 
 /* Titre découpé mot à mot pour l'apparition progressive (le mot en couleur reste d'un seul bloc). */
 const titleWords = [
-  { t: 'Des' }, { t: 'locks' }, { t: 'qui' }, { t: 'ont' }, { t: 'du caractère', em: true }, { t: ',' },
-  { t: 'de' }, { t: 'la' }, { t: 'création' }, { t: 'à' }, { t: 'l’entretien.' },
+  { t: 'Locks,' }, { t: 'small' }, { t: 'locks' }, { t: 'et' }, { t: 'micro-locks', em: true },
+  { t: 'à' }, { t: 'Abidjan.' },
 ]
-const titleLabel = 'Des locks qui ont du caractère, de la création à l’entretien.'
+const titleLabel = 'Locks, small locks et micro-locks à Abidjan.'
 const root = ref(null)
 const scrollDown = () => {
   const end = root.value?.offsetHeight ?? window.innerHeight
   window.scrollTo({ top: end - 70, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
 }
 
-const lede = computed(
-  () =>
-    salon.value.shortDescription ||
-    'Salon spécialisé dans les locks. Choisissez votre prestation, un créneau disponible, et envoyez votre demande en quelques minutes.',
-)
+const lede = BRAND_INTRO
 </script>
 
 <template>
   <section ref="root" class="hero blobs">
     <div class="container grid">
       <div class="copy">
-        <p class="eyebrow">Salon spécialisé dans les locks</p>
+        <p class="eyebrow">{{ BRAND_TAGLINE }}</p>
         <h1 :aria-label="titleLabel">
           <span v-for="(w, i) in titleWords" :key="i" class="w" :class="{ punct: w.t === ',' }" :style="{ '--i': i }" aria-hidden="true"><span><em v-if="w.em">{{ w.t }}</em><template v-else>{{ w.t }}</template></span></span>
         </h1>
         <p class="lede">{{ lede }}</p>
         <div class="cta">
-          <RouterLink v-magnetic :to="{ name: 'booking' }" class="btn btn-primary btn-glow">Prendre rendez-vous</RouterLink>
-          <RouterLink :to="{ name: 'services' }" class="link-arrow">Nos services <span class="arrow" aria-hidden="true">→</span></RouterLink>
+          <RouterLink v-magnetic :to="{ name: 'booking' }" class="btn btn-primary btn-glow">Réserver mon rendez-vous</RouterLink>
+          <RouterLink :to="{ name: 'services' }" class="link-arrow">Nos services et tarifs <span class="arrow" aria-hidden="true">→</span></RouterLink>
         </div>
-        <p v-if="loaded && salon.bookingWindowDays" class="note"><span class="dot" aria-hidden="true" /> Créneaux ouverts sur les {{ salon.bookingWindowDays }} prochains jours, mis à jour en direct.</p>
+        <p class="note"><span class="dot" aria-hidden="true" /> Sur rendez-vous : le salon vous confirme le jour et l’heure.</p>
       </div>
 
       <div class="art">
@@ -54,9 +49,9 @@ const lede = computed(
           <svg v-else viewBox="0 0 120 200" aria-hidden="true"><path d="M60 6c-34 22-34 48 0 70s34 48 0 70-34 36 0 48" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity=".85" /></svg>
         </div>
         <div class="float f1" aria-hidden="true">
-          <span class="pulse" /> <span><strong>Réservation en ligne</strong><br />Créneaux en direct</span>
+          <span class="pulse" /> <span><strong>Demande en ligne</strong><br />Réponse du salon</span>
         </div>
-        <span v-parallax="-0.08" class="stamp" aria-hidden="true">Locks<br />Soins<br />Entretien</span>
+        <span v-parallax="-0.08" class="stamp" aria-hidden="true">Locks<br />Small<br />Micro</span>
       </div>
     </div>
     <button type="button" class="cue" aria-label="Faire défiler vers les services" @click="scrollDown"><span class="mouse" aria-hidden="true"><i /></span></button>

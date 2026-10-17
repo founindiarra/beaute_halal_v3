@@ -1,14 +1,15 @@
 <script setup>
 import { useSalon } from '@/composables/useSalon'
-import { formatDateLong, formatDuration, formatPrice } from '@/utils/format'
+import { BESOINS, WHATSAPP } from '@/data/tarifs'
+import { formatDateLong } from '@/utils/format'
 
-/** Tout ce qui est affiché vient de la réponse du serveur (POST /appointments). */
+/** Récapitulatif de ce qui vient d'être envoyé au salon (POST /contact accepté par le serveur). */
 const props = defineProps({ confirmation: { type: Object, required: true } })
 defineEmits(['restart'])
 
-const { hasWhatsapp, whatsappLink } = useSalon()
-const message = () =>
-  `Bonjour Beauté Halal, je viens d’envoyer une demande de rendez-vous (référence ${props.confirmation.reference}).`
+const { whatsappLink } = useSalon()
+const besoin = () => BESOINS.find((b) => b.id === props.confirmation.besoin)?.name
+const wa = () => whatsappLink(`Bonjour Beauté Halal, je viens d’envoyer une demande de rendez-vous sur le site.\n\n${props.confirmation.message}`) || `https://wa.me/${WHATSAPP.number}`
 </script>
 
 <template>
@@ -16,24 +17,23 @@ const message = () =>
     <span class="tick" aria-hidden="true">
       <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23" /><path d="M15 27l8 8 14-16" /></svg>
     </span>
-    <p class="eyebrow">Demande enregistrée</p>
+    <p class="eyebrow">Demande envoyée</p>
     <h2>Merci{{ confirmation.firstName ? `, ${confirmation.firstName}` : '' }}. Votre demande est <em>bien reçue</em>.</h2>
     <p class="lede">
-      Ce n’est pas encore une confirmation : le salon examine votre demande et vous confirme le rendez-vous. Le créneau n’est pas définitivement réservé tant que vous n’avez pas cette confirmation.
+      Ce n’est pas encore une confirmation : le salon examine votre demande, puis vous confirme le jour et l’heure par téléphone ou WhatsApp. Le tarif final vous est annoncé avant la prestation.
     </p>
 
     <dl class="recap">
-      <div v-if="confirmation.reference"><dt>Référence</dt><dd class="ref">{{ confirmation.reference }}</dd></div>
-      <div v-if="confirmation.serviceName"><dt>Prestation</dt><dd>{{ confirmation.serviceName }}</dd></div>
-      <div v-if="confirmation.date"><dt>Date</dt><dd>{{ formatDateLong(confirmation.date) }}</dd></div>
-      <div v-if="confirmation.time"><dt>Heure</dt><dd>{{ confirmation.time }}<template v-if="confirmation.durationMinutes"> · {{ formatDuration(confirmation.durationMinutes) }}</template></dd></div>
-      <div v-if="confirmation.price !== undefined && confirmation.price !== null"><dt>Tarif</dt><dd>{{ formatPrice(confirmation.price, confirmation.currency) }}</dd></div>
+      <div v-if="confirmation.reference"><dt>Référence</dt><dd>{{ confirmation.reference }}</dd></div>
+      <div v-if="besoin()"><dt>Besoin</dt><dd>{{ besoin() }}</dd></div>
+      <div v-if="confirmation.type"><dt>Type de locks</dt><dd>{{ confirmation.type }}</dd></div>
+      <div v-if="confirmation.desiredDate"><dt>Jour souhaité</dt><dd>{{ formatDateLong(confirmation.desiredDate) }}</dd></div>
     </dl>
-    <p class="keep">Conservez cette référence : elle permet au salon de retrouver votre demande.</p>
+    <pre class="msg">{{ confirmation.message }}</pre>
 
     <div class="cta">
       <RouterLink :to="{ name: 'home' }" class="btn btn-primary">Retour à l’accueil</RouterLink>
-      <a v-if="hasWhatsapp" :href="whatsappLink(message())" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Écrire au salon sur WhatsApp<span class="sr-only"> (nouvel onglet)</span></a>
+      <a :href="wa()" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Compléter sur WhatsApp<span class="sr-only"> (nouvel onglet)</span></a>
       <button type="button" class="link-arrow" @click="$emit('restart')">Faire une autre demande</button>
     </div>
   </div>
@@ -60,7 +60,7 @@ const message = () =>
 dt { color: var(--muted); }
 dd { margin: 0; font-weight: 600; text-align: right; }
 .ref { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 0.08em; color: var(--copper); font-weight: 500; }
-.keep { font-size: 0.92rem; color: var(--muted); }
+.msg { margin: 0; padding: 1rem 1.2rem; font: inherit; font-size: 0.9rem; white-space: pre-wrap; color: var(--muted); background: var(--grad-soft); border-radius: 16px; }
 .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
 .link-arrow { background: none; border: 0; border-bottom: 1.5px solid currentColor; cursor: pointer; }
 </style>

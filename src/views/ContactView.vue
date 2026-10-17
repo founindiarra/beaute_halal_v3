@@ -7,7 +7,7 @@ import PageHero from '@/components/ui/PageHero.vue'
 import { useSalon } from '@/composables/useSalon'
 import { heroImages } from '@/data/heroImages'
 
-const { salon, hours, loading, error, hasWhatsapp, whatsappLink, reload, loaded } = useSalon()
+const { salon, loading, error, hasWhatsapp, whatsappLink, reload, loaded } = useSalon()
 
 /* La carte n'est affichée que si le salon a fourni une adresse d'intégration https. */
 const mapUrl = computed(() => {
@@ -15,7 +15,7 @@ const mapUrl = computed(() => {
   return typeof url === 'string' && /^https:\/\//.test(url) ? url : ''
 })
 const hasInfo = computed(
-  () => salon.value.phone.display || salon.value.email || salon.value.address.city || hasWhatsapp.value || hours.value.length,
+  () => salon.value.phone.display || salon.value.email || salon.value.address.city || hasWhatsapp.value,
 )
 </script>
 
@@ -56,20 +56,6 @@ const hasInfo = computed(
                 <dt>E-mail</dt>
                 <dd><a :href="`mailto:${salon.email}`">{{ salon.email }}</a></dd>
               </div>
-              <div v-if="hours.length">
-                <dt>Horaires</dt>
-                <dd>
-                  <table class="hours">
-                    <caption class="sr-only">Horaires d’ouverture</caption>
-                    <tbody>
-                      <tr v-for="h in hours" :key="h.day" :class="{ off: h.isClosed }">
-                        <th scope="row">{{ h.day }}</th>
-                        <td>{{ h.value }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </dd>
-              </div>
               <div v-if="salon.socials.length">
                 <dt>Réseaux</dt>
                 <dd class="socials">
@@ -107,10 +93,6 @@ dd { margin: 0; font-size: 1.08rem; }
 address { font-style: normal; }
 dd a { text-underline-offset: 4px; }
 .note { font-size: 0.88rem; color: var(--muted); margin-top: 0.3rem; }
-.hours { width: 100%; border-collapse: collapse; font-size: 1rem; }
-.hours th { text-align: left; font-weight: 500; padding: 0.3rem 1rem 0.3rem 0; }
-.hours td { text-align: right; }
-.hours .off { color: var(--muted); }
 .socials { display: flex; flex-wrap: wrap; gap: 0.2rem 1.4rem; }
 .form-col { display: grid; gap: 1.6rem; align-content: start; background: var(--grad-soft); }
 .form-col h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); }

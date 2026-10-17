@@ -11,9 +11,9 @@ const routes = [
     name: 'home',
     component: HomeView,
     meta: {
-      title: `${BRAND} — Salon spécialisé dans les locks`,
+      title: `${BRAND} — Locks, Small Locks et Micro-Locks à Abidjan`,
       description:
-        'Beauté Halal, salon spécialisé dans les locks : création, entretien, réparation et soins. Demandez votre rendez-vous en ligne.',
+        'Spécialiste des locks et soins capillaires texturés à Abidjan. Resserrage de locks traditionnels, small locks et micro-locks. Prise de rendez-vous en ligne.',
     },
   },
   {
@@ -22,7 +22,7 @@ const routes = [
     component: () => import('@/views/ServicesView.vue'),
     meta: {
       title: `Nos services — ${BRAND}`,
-      description: 'Toutes les prestations du salon pour vos locks, avec durées et tarifs. Réservez directement en ligne.',
+      description: 'Locks traditionnels, small locks et micro-locks : grille tarifaire du resserrage selon le volume, le délai et l’état de vos locks. Réservez en ligne.',
     },
   },
   {
@@ -40,7 +40,7 @@ const routes = [
     component: () => import('@/views/AboutView.vue'),
     meta: {
       title: `À propos — ${BRAND}`,
-      description: 'Le salon Beauté Halal, son approche des locks et la façon dont se déroule une demande de rendez-vous.',
+      description: 'Beauté Halal, l’art du soin capillaire texturé : notre engagement sur les racines et les tiges, nos tarifs transparents et le déroulé de votre rendez-vous.',
     },
   },
   {
@@ -49,7 +49,7 @@ const routes = [
     component: () => import('@/views/BookingView.vue'),
     meta: {
       title: `Rendez-vous — ${BRAND}`,
-      description: 'Choisissez votre prestation, une date et un créneau disponible, puis envoyez votre demande au salon.',
+      description: 'Choisissez création complète ou resserrage, votre type de locks et votre volume, puis envoyez votre demande au salon.',
     },
   },
   {
@@ -58,7 +58,7 @@ const routes = [
     component: () => import('@/views/ContactView.vue'),
     meta: {
       title: `Contact — ${BRAND}`,
-      description: 'Coordonnées et horaires du salon Beauté Halal. Écrivez-nous par formulaire, téléphone ou WhatsApp.',
+      description: 'Coordonnées du salon Beauté Halal. Écrivez-nous par formulaire, téléphone ou WhatsApp.',
     },
   },
   {

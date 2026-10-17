@@ -8,6 +8,7 @@
  *   GET  /gallery[?category&featured] · /gallery/categories · /testimonials · /team
  *   GET  /availability/days · /availability/slots
  *   POST /appointments · POST /contact
+ *   POST /booking-requests (demande sans créneau, backend ≥ migration 006) · GET /tarifs
  */
 const BASE_URL = (import.meta.env.VITE_API_URL || 'https://backend-beaute-halal.aeemci-ce.ci/api').replace(
   /\/+$/,
@@ -142,7 +143,31 @@ async function attachServices(items) {
   return items.map((i) => (i?.service?.slug ? i : { ...i, service: byId.get(serviceIdOf(i)) ?? null }))
 }
 
+/**
+ * « Nos coiffures » = les prestations du salon (une coiffure par prestation, rangée dans
+ * l'un des trois types de locks), gérées depuis la page Prestations du dashboard.
+ * Si l'API n'a pas encore cette organisation (aucune prestation avec photo), on retombe
+ * sur l'ancienne galerie plutôt que d'afficher une page vide.
+ */
+const fromService = (s) => ({
+  id: s.id,
+  title: s.name,
+  description: s.description ?? '',
+  imageUrl: s.imageUrl,
+  isFeatured: Boolean(s.isFeatured),
+  typeId: s.category?.slug ?? null,
+  category: s.category ?? null,
+  service: null,
+})
+
 export async function fetchGalleryItems({ category, featured } = {}) {
+  try {
+    const services = await fetchServices({ category: category && category !== 'all' ? category : undefined, featured })
+    const items = services.filter((s) => s.imageUrl).map(fromService)
+    if (items.length) return items
+  } catch {
+    /* on essaie l'ancienne galerie */
+  }
   const { data } = await get('/gallery', {
     category: category && category !== 'all' ? category : undefined,
     featured: featured === true ? 'true' : undefined,
@@ -162,6 +187,9 @@ export async function fetchTestimonials() {
   const { data, meta } = await get('/testimonials')
   return { items: data ?? [], averageRating: meta?.averageRating ?? 0 }
 }
+
+/** Catalogue tarifaire du salon (réglé depuis le dashboard). */
+export const fetchTarifs = async () => (await get('/tarifs')).data
 
 export const fetchTeam = async () => (await get('/team')).data ?? []
 
@@ -209,6 +237,15 @@ export async function createAppointment({ serviceSlug, date, time, firstName, la
     },
     { timeout: 20000 },
   )
+  return data
+}
+
+/**
+ * Demande de rendez-vous SANS créneau (site v3) : besoin, type, volume, jour souhaité, coordonnées.
+ * Le montant indicatif est calculé par le serveur ; le navigateur n'envoie aucun prix.
+ */
+export async function createBookingRequest(payload) {
+  const { data } = await post('/booking-requests', payload, { timeout: 20000 })
   return data
 }
 
