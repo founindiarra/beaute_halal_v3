@@ -10,6 +10,7 @@ import ResserragePicker from '@/components/booking/ResserragePicker.vue'
 import StepDetails from '@/components/booking/StepDetails.vue'
 import {
   clearInspiration,
+  clearTypeChoice,
   preselectFromGallery,
   setBesoin,
   setCreation,
@@ -34,10 +35,16 @@ const heading = ref(null)
 
 /* Entrées possibles, portées par l'adresse (lien partageable) :
    ?coiffure=<id> depuis « Nos coiffures » · ?besoin=creation|resserrage&type=…&volume=…&formule=… depuis la grille. */
-onMounted(async () => {
+const applyEntry = async () => {
   const { coiffure, type, volume, formule } = route.query
   /* Le type arrive pré-rempli, mais le besoin (création / resserrage) n'est JAMAIS choisi à la place de la cliente. */
+  /* Une seule carte à la fois : la dernière entrée remplace l'ancienne (type ↔ coiffure). */
+  if (coiffure && !findType(type)) {
+    clearTypeChoice()
+    if (String(state.inspiration?.id) !== String(coiffure)) clearInspiration()
+  }
   if (findType(type)) {
+    clearInspiration()
     const vol = findVolume(volume) ? volume : ''
     setCreation({ type, volume: vol })
     setResserrage({ type, volume: vol, formule: findFormule(formule) ? formule : 'complet' })
@@ -55,7 +62,10 @@ onMounted(async () => {
   } finally {
     resolving.value = false
   }
-})
+}
+onMounted(applyEntry)
+/* Même page, autre entrée (autre type ou autre coiffure) : on applique la nouvelle, pas de cumul. */
+watch(() => route.fullPath, (to, from) => { if (to !== from && (route.query.coiffure || route.query.type)) applyEntry() })
 
 const direction = ref('fwd')
 watch(

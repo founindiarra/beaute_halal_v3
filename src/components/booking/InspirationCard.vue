@@ -9,9 +9,9 @@ defineEmits(['clear'])
 
 <template>
   <aside class="insp" aria-label="Coiffure choisie">
-    <ApiImage :src="inspiration.imageUrl" :alt="inspiration.title" ratio="4 / 5" class="pic" />
+    <ApiImage :src="inspiration.imageUrl" :alt="inspiration.title" ratio="4 / 3" class="pic" />
     <div class="txt">
-      <p class="eyebrow">Coiffure choisie</p>
+      <p class="eyebrow">Votre choix</p>
       <h2>{{ inspiration.title }}</h2>
       <p v-if="inspiration.description" class="desc">{{ inspiration.description }}</p>
       <p class="avail">Prestations : <span v-for="(p, i) in PRESTATIONS" :key="p.id">{{ p.name }}<template v-if="i < PRESTATIONS.length - 1"> · </template></span></p>
@@ -21,12 +21,14 @@ defineEmits(['clear'])
 </template>
 
 <style scoped>
-.insp { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1.1rem; align-items: center; padding: 0.9rem; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
-.pic { border-radius: 18px; overflow: hidden; }
-.txt { display: grid; gap: 0.35rem; min-width: 0; }
-.txt h2 { font-size: clamp(1.25rem, 2.6vw, 1.7rem); }
-.desc { color: var(--muted); font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.avail { font-size: 0.82rem; font-weight: 700; color: var(--copper); }
+/* Même gabarit que la carte du type de locks : une seule grande carte, jamais deux empilées. */
+.insp { display: grid; overflow: hidden; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lift); }
+.pic { min-height: 15rem; }
+.pic :deep(img), .pic :deep(div) { height: 100%; }
+.txt { display: grid; gap: 0.55rem; align-content: center; min-width: 0; padding: clamp(1.4rem, 3.5vw, 2.4rem); }
+.txt h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.05; }
+.desc { color: var(--muted); font-size: 1.02rem; max-width: 44ch; }
+.avail { font-size: 0.9rem; font-weight: 700; color: var(--copper); }
 .linkish { justify-self: start; background: none; border: 0; padding: 0; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; color: var(--copper); font-weight: 600; }
-@media (min-width: 640px) { .insp { grid-template-columns: 11rem 1fr; } }
+@media (min-width: 720px) { .insp { grid-template-columns: minmax(16rem, 2fr) 3fr; min-height: 22rem; } .pic { min-height: 100%; } }
 </style>

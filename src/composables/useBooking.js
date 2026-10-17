@@ -176,7 +176,15 @@ export function preselectFromGallery(item) {
   state.confirmation = null
   state.submitError = null
   state.step = 1
+  clearTypeChoice()
   state.inspiration = { id: item.id, title: item.title, description: item.description ?? '', imageUrl: item.imageUrl }
+}
+
+/** Une nouvelle entrée (type ou coiffure) remplace la précédente : jamais deux cartes empilées. */
+export function clearTypeChoice() {
+  state.besoin = ''
+  state.creation = emptyCreation()
+  state.resserrage = emptyResserrage()
 }
 
 export function clearInspiration() {

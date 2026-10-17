@@ -24,6 +24,7 @@ import { goodToKnow } from '@/data/tarifs'
 .list { display: grid; gap: 1.2rem; }
 .list li { display: grid; gap: 0.5rem; padding: 1.5rem; background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); position: relative; overflow: hidden; }
 .list li::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--grad); }
+.list li:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); }
 .list h3 { font-size: 1.2rem; }
 .list p { color: var(--muted); font-size: 0.97rem; }
 @media (min-width: 700px) { .list { grid-template-columns: repeat(2, 1fr); } }

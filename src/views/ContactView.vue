@@ -27,7 +27,7 @@ const hasInfo = computed(
 
     <section class="section-tight">
       <div class="container grid">
-        <div class="info">
+        <div v-reveal.left class="info">
           <DataState :loading="loading && !loaded" :error="!loaded ? error : null" :empty="loaded && !hasInfo" loading-label="Chargement des coordonnées…" empty-label="Les coordonnées seront bientôt renseignées. Utilisez le formulaire." min-height="8rem" @retry="reload">
             <dl class="list">
               <div v-if="salon.address.city">
@@ -66,7 +66,7 @@ const hasInfo = computed(
           </DataState>
         </div>
 
-        <div class="form-col">
+        <div v-reveal.right="140" class="form-col">
           <h2>Un message ?</h2>
           <ContactForm />
         </div>
@@ -74,7 +74,7 @@ const hasInfo = computed(
     </section>
 
     <section v-if="mapUrl" class="section-tight map">
-      <div class="container">
+      <div v-reveal.zoom class="container">
         <iframe :src="mapUrl" title="Localisation du salon" loading="lazy" referrerpolicy="no-referrer-when-downgrade" sandbox="allow-scripts allow-same-origin allow-popups" />
       </div>
     </section>
