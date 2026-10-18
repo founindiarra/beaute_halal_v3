@@ -6,7 +6,7 @@ import { heroImages } from '@/data/heroImages'
 
 defineProps({
   title: { type: String, default: 'Prête pour de beaux locks ?' },
-  text: { type: String, default: 'Choisissez création complète ou resserrage, puis envoyez votre demande. Le salon vous confirme le jour et l’heure.' },
+  text: { type: String, default: 'Choisissez création complète ou resserrage, puis envoyez votre demande.' },
 })
 
 const { salon, hasWhatsapp, whatsappLink } = useSalon()
@@ -46,7 +46,7 @@ const failed = ref(false)
 .cta-band { padding-block: clamp(2rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem); }
 .card { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-lg); padding: clamp(1.8rem, 5vw, 4rem); box-shadow: var(--shadow-lift); }
 .bg { position: absolute; left: 0; top: -12%; z-index: -2; width: 100%; height: 124%; object-fit: cover; object-position: center 40%; }
-.veil { position: absolute; inset: 0; z-index: -1; background: linear-gradient(100deg, rgba(24, 19, 16, 0.95) 0%, rgba(74, 54, 36, 0.8) 55%, rgba(201, 162, 39, 0.45) 100%); }
+.veil { position: absolute; inset: 0; z-index: -1; background: linear-gradient(100deg, rgba(74, 37, 18, 0.95) 0%, rgba(87, 42, 19, 0.8) 55%, rgba(124, 69, 39, 0.45) 100%); }
 .grid { display: grid; gap: 2.5rem; }
 .lead { display: grid; gap: 1.2rem; align-content: start; }
 .lead h2 { color: #fff; }

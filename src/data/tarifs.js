@@ -58,7 +58,7 @@ const ETAT_MICRO = [
 export const LOCK_TYPES = [
   {
     id: 'traditionnels',
-    name: 'Locks Traditionnels',
+    name: 'Locks Traditionnelles',
     tagline: 'Les locks classiques',
     description: 'Locks classiques aux dimensions généreuses.',
     size: '1 cm à 1,5 cm',
@@ -137,7 +137,7 @@ export let videoAdvice =
 export const goodToKnow = [
   { title: 'Consultation & diagnostic', text: 'Consultation payante à 5 000 FCFA pour toute nouvelle cliente. Diagnostic gratuit pour les anciennes clientes. Le tarif vous est annoncé avant le début de la prestation.' },
   { title: 'Travail des racines ET des tiges', text: 'Chaque resserrage complet inclut la reprise des racines et la retouche des tiges, jusqu’à la maturation complète de vos locks (environ 2 ans). C’est notre signature.' },
-  { title: 'Respect des délais', text: 'Pour préserver la santé de vos locks et bénéficier du tarif standard : 2 mois pour les Locks Traditionnels et les Small Locks, 6 semaines pour les Micro-Locks.' },
+  { title: 'Respect des délais', text: 'Pour préserver la santé de vos locks et bénéficier du tarif standard : 2 mois pour les Locks Traditionnelles et les Small Locks, 6 semaines pour les Micro-Locks.' },
   { title: 'Temps de prestation', text: 'Un resserrage de Micro-Locks demande au minimum 3 heures de travail en solo (2 heures à deux mains), et peut aller jusqu’à 5-6 heures selon l’état. Merci de prévoir le temps nécessaire.' },
   { title: 'Retouche de tiges seule', text: 'Pour les cas particuliers (événement, entre-deux séances), la retouche de tiges seule est étudiée au cas par cas : parlez-nous-en.' },
   { title: 'Réparations', text: 'Les tarifs de réparation sont des fourchettes indicatives : le prix définitif dépend de l’ampleur des dégâts et du temps de travail (jusqu’à 2 jours pour les cas lourds). Réparations offertes pour les clientes abonnées à l’Institut Beauté Halal qui respectent le calendrier de suivi.' },
@@ -203,7 +203,7 @@ export const BESOINS = [
 
 /** Les prestations de la nouvelle logique (nom + description), présentées sur les coiffures. */
 export const PRESTATIONS = [
-  { id: 'creation', name: 'Création complète', description: 'Création de vos locks de A à Z, dans le type choisi (traditionnels, small ou micro-locks).' },
+  { id: 'creation', name: 'Création complète', description: 'Création de vos locks de A à Z, dans le type choisi (traditionnelles, small ou micro-locks).' },
   { id: 'resserrage', name: 'Resserrage complet', description: 'Racines et tiges retravaillées jusqu’à la maturation complète de vos locks (environ 2 ans).' },
   { id: 'racines', name: 'Reprise de racines seule', description: 'Uniquement la repousse au niveau du cuir chevelu, pour les locks matures ou sur demande (−30 %).' },
   { id: 'reparation', name: 'Réparation', description: 'Remise en état des locks abîmées ou cassées : tarif indicatif selon l’ampleur des dégâts.' },
@@ -245,7 +245,7 @@ export function buildRequestMessage({ besoin, resserrage, creation, customer, in
     if (est) lines.push(`Tarif indicatif : ${est.partial ? 'à partir de ' : ''}${money(est.total)}`)
   }
   if (inspiration?.title) lines.push(`Coiffure souhaitée : « ${inspiration.title} » (vue dans Nos coiffures)`)
-  if (customer.desiredDate) lines.push(`Jour souhaité : ${customer.desiredDate}`)
+  if (customer.desiredDate) lines.push(`Jour souhaité : ${customer.desiredDate}${customer.desiredTime ? ` à ${customer.desiredTime}` : ''}`)
   if (customer.birthDate) lines.push(`Date de naissance : ${customer.birthDate}`)
   lines.push(`Cliente : ${customer.firstName.trim()} ${customer.lastName.trim()} · ${customer.phone.trim()}`)
   if (customer.note?.trim()) lines.push(`Message : ${customer.note.trim()}`)
@@ -292,3 +292,9 @@ export function applyCatalogue(data) {
   replaceArray(PRESTATIONS, data.prestations)
   return true
 }
+
+/* Images du guide de réservation : une illustration par volume (XS → XL) et par longueur.
+   Fichiers dans public/images/guide/ — remplaçables par de vraies photos du salon (même nom, .svg ou adapter l'extension ici). */
+const slug = (v) => String(v ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim().split(/\s+/)[0]
+export const volumeImage = (id) => (id ? `/images/guide/volume-${slug(id)}.svg` : null)
+export const longueurImage = (label) => (label ? `/images/guide/longueur-${slug(label)}.svg` : null)

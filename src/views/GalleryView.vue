@@ -9,7 +9,7 @@ import DataState from '@/components/ui/DataState.vue'
 import PageHero from '@/components/ui/PageHero.vue'
 import { preselectFromGallery } from '@/composables/useBooking'
 import { useApiData } from '@/composables/useApiData'
-import { heroImages } from '@/data/heroImages'
+import { heroArt } from '@/data/heroImages'
 import { LOCK_TYPES, PRESTATIONS, inferType } from '@/data/tarifs'
 import { fetchGalleryItems } from '@/services/api'
 
@@ -50,7 +50,7 @@ const book = (item) => {
 
 <template>
   <div>
-    <PageHero :image="heroImages.gallery" eyebrow="Nos coiffures" title="Les coiffures du salon." lede="Ouvrez une photo en grand, puis demandez un rendez-vous pour la coiffure qui vous plaît : création complète ou resserrage.">
+    <PageHero :image="heroArt.gallery" eyebrow="Nos coiffures" title="Les coiffures du salon." lede="Ouvrez une photo en grand, puis demandez un rendez-vous pour la coiffure qui vous plaît : création complète ou resserrage.">
       <template #title>Les <em>coiffures</em> du salon.</template>
     </PageHero>
 
@@ -111,7 +111,7 @@ const book = (item) => {
 .card:hover .presta { font-size: 0.78rem; line-height: 1.35; color: var(--muted); }
 .more { letter-spacing: 0.04em; }
 /* Voile sombre + reflet au survol de la photo */
-.media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(24, 19, 16, 0.45)); opacity: 0; transition: opacity 0.5s var(--ease); pointer-events: none; }
+.media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(74, 37, 18, 0.45)); opacity: 0; transition: opacity 0.5s var(--ease); pointer-events: none; }
 .card:hover .media::after, .card:focus-visible .media::after { opacity: 1; }
 @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); gap: 1.4rem; } }
 @media (min-width: 1100px) { .cards { grid-template-columns: repeat(4, 1fr); } }

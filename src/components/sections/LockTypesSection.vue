@@ -65,7 +65,7 @@ const src = (id) => typeImages[id]
 .media { position: relative; overflow: hidden; }
 .pic :deep(img) { transition: transform 1.1s var(--ease); }
 .card:hover .pic :deep(img) { transform: scale(1.07); }
-.media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(24, 19, 16, 0.18) 0%, transparent 35%, rgba(24, 19, 16, 0.88) 100%); pointer-events: none; }
+.media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(74, 37, 18, 0.18) 0%, transparent 35%, rgba(74, 37, 18, 0.88) 100%); pointer-events: none; }
 .chip { position: absolute; z-index: 1; left: 1rem; top: 1rem; padding: 0.35rem 0.85rem; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); background: rgba(255, 255, 255, 0.92); border-radius: 999px; backdrop-filter: blur(6px); }
 .badge { position: absolute; z-index: 1; right: 1rem; top: 1rem; display: grid; justify-items: end; padding: 0.4rem 0.85rem; color: #fff; background: var(--grad-btn); border-radius: 16px; box-shadow: var(--shadow); line-height: 1.1; }
 .badge small { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }

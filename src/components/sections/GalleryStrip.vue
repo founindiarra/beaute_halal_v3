@@ -24,7 +24,7 @@ const open = (item) => router.push({ name: 'gallery', query: { photo: item.id } 
 
 <template>
   <section class="gal on-dark">
-    <svg class="wave top" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,0 L0,0 Z" fill="#faf8f4" /></svg>
+    <svg class="wave top" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,0 L0,0 Z" fill="#fdfbf7" /></svg>
     <div class="container inner">
       <header class="head" v-reveal>
         <div>
@@ -48,7 +48,7 @@ const open = (item) => router.push({ name: 'gallery', query: { photo: item.id } 
         </div>
       </div>
     </DataState>
-    <svg class="wave bottom" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,80 L0,80 Z" fill="#faf8f4" /></svg>
+    <svg class="wave bottom" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,80 L0,80 Z" fill="#fdfbf7" /></svg>
   </section>
 </template>
 
@@ -68,7 +68,7 @@ const open = (item) => router.push({ name: 'gallery', query: { photo: item.id } 
 .row button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; border-radius: 22px; overflow: hidden; position: relative; box-shadow: 0 18px 36px -22px rgba(0, 0, 0, 0.7); }
 .row :deep(img) { transition: transform 0.8s var(--ease); }
 .row button:hover :deep(img) { transform: scale(1.06); }
-.cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 0.8rem 0.7rem; font-size: 0.82rem; font-weight: 500; color: #fff; background: linear-gradient(transparent, rgba(24, 19, 16, 0.88)); }
+.cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 0.8rem 0.7rem; font-size: 0.82rem; font-weight: 500; color: #fff; background: linear-gradient(transparent, rgba(74, 37, 18, 0.88)); }
 @keyframes slide { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .track { animation: none; }

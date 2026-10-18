@@ -28,6 +28,7 @@ const wa = () => whatsappLink(`Bonjour Beauté Halal, je viens d’envoyer une d
       <div v-if="besoin()"><dt>Besoin</dt><dd>{{ besoin() }}</dd></div>
       <div v-if="confirmation.type"><dt>Type de locks</dt><dd>{{ confirmation.type }}</dd></div>
       <div v-if="confirmation.desiredDate"><dt>Jour souhaité</dt><dd>{{ formatDateLong(confirmation.desiredDate) }}</dd></div>
+      <div v-if="confirmation.desiredTime"><dt>Créneau souhaité</dt><dd>{{ confirmation.desiredTime }}</dd></div>
     </dl>
     <pre class="msg">{{ confirmation.message }}</pre>
 

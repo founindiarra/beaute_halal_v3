@@ -18,7 +18,7 @@ const nav = [
 
 <template>
   <footer class="footer-wrap on-dark">
-    <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,80 L0,80 Z" fill="#181310" /></svg>
+    <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,80 L0,80 Z" fill="#4a2512" /></svg>
     <div class="footer on-dark">
       <div v-reveal.fade class="container grid">
         <div class="col-brand">
@@ -59,7 +59,8 @@ const nav = [
 
         <div class="col">
           <h2 class="h">Rendez-vous</h2>
-          <p class="blurb">Sur rendez-vous uniquement : le salon vous confirme le jour et l’heure par téléphone ou WhatsApp.</p>
+          <p class="blurb">Choisissez votre besoin, votre jour et votre créneau : votre demande est enregistrée en attente, et le salon vous recontacte pour la valider.</p>
+          <RouterLink :to="{ name: 'booking' }" class="rdv">Demander un rendez-vous →</RouterLink>
         </div>
       </div>
 
@@ -70,20 +71,22 @@ const nav = [
 
 <style scoped>
 .footer-wrap { margin-top: -1px; background: var(--ivory); }
-.footer { background: var(--grad-dark); padding-top: clamp(2.5rem, 6vw, 4.5rem); }
+.footer { background: var(--grad-dark); padding-top: clamp(1.5rem, 3.5vw, 2.5rem); }
 .wave { margin-bottom: -1px; }
-.grid { display: grid; gap: 2.75rem 2rem; grid-template-columns: 1fr; padding-bottom: 3.5rem; }
-.brand { display: inline-block; text-decoration: none; margin-bottom: 1.25rem; color: #f7f4ee; }
+.grid { display: grid; gap: 1.5rem 2rem; grid-template-columns: 1fr; padding-bottom: 1.75rem; }
+.brand { display: inline-block; text-decoration: none; margin-bottom: 0.6rem; color: #f7f4ee; }
 .brand :deep(.wordmark), .brand :deep(.wordmark-name) { color: #f7f4ee; }
 .brand :deep(.wordmark-sub) { color: rgba(246, 243, 235, 0.78); }
 .blurb { color: var(--on-dark-muted); max-width: 26rem; }
-.socials { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin-top: 1.25rem; }
-.h { font-family: var(--font-body); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--caramel); margin-bottom: 1rem; line-height: 1.2; }
+.socials { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin-top: 0.6rem; }
+.h { font-family: var(--font-body); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.4rem; line-height: 1.2; }
 .col ul { display: flex; flex-direction: column; gap: 0.1rem; }
-.col a, .socials a { display: inline-flex; align-items: center; min-height: 40px; text-decoration: none; color: #f7f4ee; }
+.col a, .socials a { display: inline-flex; align-items: center; min-height: 36px; text-decoration: none; color: #f7f4ee; }
 .col a:hover, .socials a:hover { color: var(--caramel); text-decoration: underline; text-underline-offset: 4px; }
 address { font-style: normal; color: var(--on-dark-muted); padding-block: 0.4rem; }
-.legal { border-top: 1px solid rgba(255, 255, 255, 0.14); padding-block: 1.4rem 1.8rem; color: var(--on-dark-muted); font-size: 0.88rem; }
+.legal { border-top: 1px solid rgba(255, 255, 255, 0.14); padding-block: 0.9rem 1.1rem; color: var(--on-dark-muted); font-size: 0.88rem; }
 @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } .col-brand { grid-column: 1 / -1; } }
 @media (min-width: 1024px) { .grid { grid-template-columns: 1.5fr 1fr 1.1fr 1.1fr; } .col-brand { grid-column: auto; } }
+.rdv { display: inline-flex; align-items: center; min-height: 36px; margin-top: 0.4rem; font-weight: 700; color: var(--caramel); text-decoration: none; }
+.rdv:hover { text-decoration: underline; text-underline-offset: 4px; }
 </style>

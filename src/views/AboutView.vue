@@ -5,7 +5,7 @@ import VisitBlock from '@/components/sections/VisitBlock.vue'
 import GoodToKnow from '@/components/sections/GoodToKnow.vue'
 import SignatureBand from '@/components/sections/SignatureBand.vue'
 import PageHero from '@/components/ui/PageHero.vue'
-import { heroImages } from '@/data/heroImages'
+import { heroArt } from '@/data/heroImages'
 import { values } from '@/data/editorial'
 import { BRAND_INTRO } from '@/data/tarifs'
 import { pad2 } from '@/utils/format'
@@ -15,7 +15,7 @@ import { pad2 } from '@/utils/format'
 <template>
   <div>
     <PageHero
-      :image="heroImages.about"
+      :image="heroArt.about"
       eyebrow="À propos"
       title="L’art du soin capillaire texturé."
       :lede="BRAND_INTRO"

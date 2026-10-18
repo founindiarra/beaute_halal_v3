@@ -28,3 +28,19 @@ export const typeImages = {
 }
 
 export default heroImages
+
+/** Photos des bandeaux (détourées, fond transparent) : le fond marron et les deux cercles sont dessinés par le site.
+ *  Chaque photo existe en version ordinateur et en version mobile (même nom + « -mobile »). */
+export const heroArt = {
+  home: '/images/hero/accueil.webp',
+  services: '/images/hero/services.webp',
+  gallery: '/images/hero/galerie.webp',
+  about: '/images/hero/a-propos.webp',
+  booking: '/images/hero/rendez-vous.webp',
+  contact: '/images/hero/contact.webp',
+}
+
+/** Photos rondes : posées telles quelles (sans détourage) dans le cercle du bandeau. Même photo que « Coiffures sur locks » du site. */
+export const heroDisc = {
+  about: u('1535146981003-d37e3e2428c3', 1000),
+}

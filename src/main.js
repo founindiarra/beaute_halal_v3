@@ -1,6 +1,3 @@
-import '@fontsource-variable/fraunces/opsz.css'
-import '@fontsource-variable/fraunces/opsz-italic.css'
-import '@fontsource-variable/dm-sans/index.css'
 import './style.css'
 
 import { createApp } from 'vue'

@@ -13,7 +13,7 @@ const routes = [
     meta: {
       title: `${BRAND} — Locks, Small Locks et Micro-Locks à Abidjan`,
       description:
-        'Spécialiste des locks et soins capillaires texturés à Abidjan. Resserrage de locks traditionnels, small locks et micro-locks. Prise de rendez-vous en ligne.',
+        'Spécialiste des locks et soins capillaires texturés à Abidjan. Resserrage de locks traditionnelles, small locks et micro-locks. Prise de rendez-vous en ligne.',
     },
   },
   {
@@ -22,7 +22,7 @@ const routes = [
     component: () => import('@/views/ServicesView.vue'),
     meta: {
       title: `Nos services — ${BRAND}`,
-      description: 'Locks traditionnels, small locks et micro-locks : grille tarifaire du resserrage selon le volume, le délai et l’état de vos locks. Réservez en ligne.',
+      description: 'Locks traditionnelles, small locks et micro-locks : grille tarifaire du resserrage selon le volume, le délai et l’état de vos locks. Réservez en ligne.',
     },
   },
   {

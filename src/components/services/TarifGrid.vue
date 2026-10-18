@@ -147,7 +147,7 @@ tbody th small { color: var(--muted); font-size: 0.8rem; }
 .note::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--grad); }
 .note h3 { font-size: clamp(1.35rem, 2.4vw, 1.7rem); }
 .note ul { display: grid; gap: 0.85rem; font-size: 0.97rem; line-height: 1.5; }
-.note li { display: grid; grid-template-columns: 5.6rem 1fr; gap: 0.2rem 1rem; align-items: baseline; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(24, 19, 16, 0.08); }
+.note li { display: grid; grid-template-columns: 5.6rem 1fr; gap: 0.2rem 1rem; align-items: baseline; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(74, 37, 18, 0.08); }
 .note li:last-child { border-bottom: 0; padding-bottom: 0; }
 .note li strong { display: grid; place-items: center; min-height: 2.1rem; padding: 0.2rem 0.6rem; font-size: 0.82rem; letter-spacing: 0.04em; color: var(--copper); background: var(--grad-soft); border-radius: 999px; }
 .formules li { grid-template-columns: 1fr; gap: 0.35rem; }

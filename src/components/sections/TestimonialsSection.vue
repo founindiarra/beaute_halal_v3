@@ -84,7 +84,7 @@ watch(items, () => nextTick(update))
 .quotes li { flex: none; width: min(86%, 380px); scroll-snap-align: start; padding: 1.4rem 1.5rem; display: grid; gap: 1rem; align-content: space-between; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: var(--radius-lg); backdrop-filter: blur(6px); }
 blockquote { margin: 0; font-family: var(--font-display); font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.35; font-style: italic; font-variation-settings: 'opsz' 48; }
 footer { display: flex; flex-wrap: wrap; gap: 0.2rem 0.6rem; font-size: 0.9rem; color: rgba(247, 244, 238, 0.88); }
-.stars { color: var(--caramel); letter-spacing: 0.1em; }
+.stars { color: var(--copper); letter-spacing: 0.1em; }
 .date { opacity: 0.8; }
 @media (min-width: 900px) { .quotes li { width: calc((100% - 2rem) / 3); } }
 </style>

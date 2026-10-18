@@ -5,13 +5,13 @@ import SignatureBand from '@/components/sections/SignatureBand.vue'
 import TarifGrid from '@/components/services/TarifGrid.vue'
 import VisitBlock from '@/components/sections/VisitBlock.vue'
 import PageHero from '@/components/ui/PageHero.vue'
-import { heroImages } from '@/data/heroImages'
+import { heroArt } from '@/data/heroImages'
 </script>
 
 <template>
   <div>
     <PageHero
-      :image="heroImages.services"
+      :image="heroArt.services"
       eyebrow="Nos services"
       title="Locks, small locks et micro-locks."
       lede="Trois types de locks, une grille tarifaire claire et un engagement : le travail des racines et des tiges."
