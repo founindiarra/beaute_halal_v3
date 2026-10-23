@@ -44,6 +44,15 @@ npm run dev
 Dans le mock : un commentaire contenant `TEST409` provoque un conflit de créneau ; un e-mail contenant `invalid422` provoque une erreur de validation.
 `scripts/mock-api.mjs` n'est **pas** un backend : c'est un outil de test qui reproduit le contrat des routes déjà utilisées par les sites 1 et 2.
 
+## Tests
+
+```bat
+npm test        # tests unitaires (Vitest) : numéro WhatsApp unique, grille tarifaire, synchronisation avec le dashboard
+npm run lint
+```
+
+Ils ne demandent ni navigateur ni réseau. Le **numéro WhatsApp du salon (+225 05 66 15 74 32)** est la seule source de tous les liens WhatsApp : un test vérifie qu'aucun numéro `wa.me/…` n'est écrit en dur dans le code. Il se change dans le dashboard (Tarifs → contact). Les tests de l'API (réservation, paiement, WhatsApp…) sont dans le projet backend (`npm test` là-bas).
+
 ## Routes de l'API utilisées
 
 Toutes publiques, déjà exploitées par les sites 1 et 2 (client unique : `src/services/api.js`, aucun `fetch` ailleurs) :

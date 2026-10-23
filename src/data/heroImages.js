@@ -17,20 +17,25 @@ export const heroImages = {
   about: u('1676293038867-84ee4e09c24b'), // coiffure en cours, au salon
   booking: u('1653263169788-9332cdbf07f5'), // longues locks
   contact: u('1535146981003-d37e3e2428c3'), // gros plan chaud
-  cta: u('1662991859083-86e0b45208b0'), // locks cuivrés sur fond sombre
+  cta: '/images/visite.webp', // photo du salon (bandeau « Venir au salon »)
 }
 
-/** Photos des trois types de locks (cartes « Nos services »). Photos d'ambiance : remplaçables par les photos du salon. */
+/** Photos des trois types de locks (cartes « Nos services ») : vraies photos du salon. Une photo envoyée depuis le dashboard (page Catégories) les remplace. */
 export const typeImages = {
-  traditionnels: u('1635627091599-aedcf8241102', 900),
-  small: u('1676293038867-84ee4e09c24b', 900),
-  micro: u('1630488971092-ebf24950529f', 900),
+  traditionnels: '/images/types/traditionnels.webp',
+  small: '/images/types/small.webp',
+  micro: '/images/types/micro.webp',
 }
 
 export default heroImages
 
 /** Photos des bandeaux (détourées, fond transparent) : le fond marron et les deux cercles sont dessinés par le site.
  *  Chaque photo existe en version ordinateur et en version mobile (même nom + « -mobile »). */
+/** Version mobile d'une bannière réglée depuis le dashboard (adresse ordinateur → adresse mobile). Sinon : même nom + « -mobile ». */
+export const heroMobile = new Map()
+/** Photos du salon qui défilent dans le cercle de la page À propos (réglables depuis le dashboard). */
+export const aboutPhotos = ['/images/salon/accueil-arche.webp', '/images/salon/salle.webp']
+
 export const heroArt = {
   home: '/images/hero/accueil.webp',
   services: '/images/hero/services.webp',
@@ -38,6 +43,11 @@ export const heroArt = {
   about: '/images/hero/a-propos.webp',
   booking: '/images/hero/rendez-vous.webp',
   contact: '/images/hero/contact.webp',
+}
+
+/** Vidéo d'ambiance des bandeaux (page → { src, poster }). Par défaut : la vidéo intégrée au site ; remplaçable depuis le dashboard. */
+export const heroVideo = {
+  booking: { src: '/videos/hero/rendez-vous.mp4', poster: '/images/hero/rendez-vous-video.webp' },
 }
 
 /** Photos rondes : posées telles quelles (sans détourage) dans le cercle du bandeau. Même photo que « Coiffures sur locks » du site. */

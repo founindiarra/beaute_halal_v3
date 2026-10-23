@@ -3,7 +3,7 @@ import pluginVue from 'eslint-plugin-vue'
 import globals from 'globals'
 
 export default [
-  { ignores: ['dist/**', 'node_modules/**', '_scaffold-original/**'] },
+  { ignores: ['dist/**', 'node_modules/**', '_scaffold-original/**', 'nouvelle-version/**'] },
   js.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
   {
@@ -23,7 +23,7 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.mjs', 'vite.config.js', 'eslint.config.js'],
+    files: ['scripts/**/*.mjs', 'vite.config.js', 'eslint.config.js', 'src/**/*.test.js'],
     languageOptions: { globals: { ...globals.node } },
   },
 ]

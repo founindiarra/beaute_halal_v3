@@ -1,6 +1,7 @@
 <script setup>
 import { useSalon } from '@/composables/useSalon'
-import { values } from '@/data/editorial'
+import EmText from '@/components/ui/EmText.vue'
+import { SITE } from '@/data/tarifs'
 import { pad2 } from '@/utils/format'
 
 const { salon } = useSalon()
@@ -11,13 +12,13 @@ const { salon } = useSalon()
     <div class="container">
       <div class="panel">
         <div v-reveal.left class="statement">
-          <p class="eyebrow">Le savoir-faire</p>
-          <h2>Une affaire de <em>geste</em>, de tension et de régularité.</h2>
+          <p class="eyebrow">{{ SITE.approche.eyebrow }}</p>
+          <h2><EmText :text="SITE.approche.titre" /></h2>
           <p v-if="salon.tagline" class="lede">{{ salon.tagline }}</p>
-          <RouterLink :to="{ name: 'about' }" class="link-arrow">Découvrir le salon <span class="arrow" aria-hidden="true">→</span></RouterLink>
+          <RouterLink :to="{ name: 'about' }" class="link-arrow">{{ SITE.approche.lien }} <span class="arrow" aria-hidden="true">→</span></RouterLink>
         </div>
         <ul class="values">
-          <li v-for="(v, i) in values" :key="v.title" v-reveal.right="i * 110">
+          <li v-for="(v, i) in SITE.approche.valeurs" :key="v.title" v-reveal.right="i * 110">
             <span class="numeral">{{ pad2(i + 1) }}</span>
             <div>
               <h3>{{ v.title }}</h3>

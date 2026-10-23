@@ -1,5 +1,6 @@
 <script setup>
-import { process } from '@/data/editorial'
+import EmText from '@/components/ui/EmText.vue'
+import { SITE } from '@/data/tarifs'
 import { pad2 } from '@/utils/format'
 </script>
 
@@ -7,11 +8,11 @@ import { pad2 } from '@/utils/format'
   <section class="section">
     <div class="container">
       <header class="head" v-reveal>
-        <p class="eyebrow">Comment ça marche</p>
-        <h2>Votre demande en <em>quatre temps</em></h2>
+        <p class="eyebrow">{{ SITE.etapes.eyebrow }}</p>
+        <h2><EmText :text="SITE.etapes.titre" /></h2>
       </header>
       <ol class="steps">
-        <li v-for="(s, i) in process" :key="s.title" v-reveal.zoom="i * 110">
+        <li v-for="(s, i) in SITE.etapes.liste" :key="s.title" v-reveal.zoom="i * 110">
           <span class="numeral">{{ pad2(i + 1) }}</span>
           <h3>{{ s.title }}</h3>
           <p>{{ s.text }}</p>

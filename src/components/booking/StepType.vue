@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import { typeImages } from '@/data/heroImages'
-import { LOCK_TYPES, consultation, findType, videoAdvice } from '@/data/tarifs'
+import { LOCK_TYPES, TAILLES_AIDE, findType } from '@/data/tarifs'
 import { setType, useBooking } from '@/composables/useBooking'
 
 const { state } = useBooking()
@@ -32,19 +32,24 @@ const isCreation = computed(() => state.besoin === 'creation')
         <span class="check" aria-hidden="true">✓</span>
       </button>
     </div>
+    <details class="aide">
+      <summary>{{ TAILLES_AIDE.title }}</summary>
+      <ul><li v-for="(l, i) in TAILLES_AIDE.lines" :key="i">{{ l }}</li></ul>
+    </details>
     <p v-if="type" class="hint">{{ type.description }}</p>
     <p v-else-if="chosen === 'inconnu'" class="hint">Pas de souci : le salon vous conseille selon vos cheveux et votre style de vie.</p>
-    <p class="hint">{{ videoAdvice }}</p>
-    <p class="hint">{{ consultation.nouvelle }} · {{ consultation.ancienne }}.</p>
   </fieldset>
 </template>
 
 <style scoped>
+.aide { padding: 0.9rem 1.1rem; background: var(--grad-soft); border-radius: 14px; }
+.aide summary { cursor: pointer; font-weight: 700; color: var(--copper); min-height: 32px; }
+.aide ul { margin: 0.6rem 0 0; padding-left: 1.2rem; display: grid; gap: 0.35rem; line-height: 1.5; }
 .types { display: grid; gap: 0.8rem; }
 @media (min-width: 640px) { .types { grid-template-columns: repeat(2, 1fr); } }
-.typ { position: relative; display: grid; grid-template-columns: 5.2rem 1fr; align-items: center; gap: 1rem; text-align: left; padding: 0.7rem 1rem 0.7rem 0.7rem; font: inherit; color: var(--ink); background: #fff; border: 1.5px solid rgba(87, 42, 19, 0.15); border-radius: 18px; cursor: pointer; transition: all 0.25s var(--ease); animation: cardIn 0.75s var(--ease) both; }
+.typ { position: relative; display: grid; grid-template-columns: 5.2rem 1fr; align-items: center; gap: 1rem; text-align: left; padding: 0.7rem 1rem 0.7rem 0.7rem; font: inherit; color: var(--ink); background: #fff; border: 1.5px solid rgba(50, 24, 15, 0.15); border-radius: 18px; cursor: pointer; transition: all 0.25s var(--ease); animation: cardIn 0.75s var(--ease) both; }
 .typ:hover { border-color: var(--copper); transform: translateY(-3px); box-shadow: var(--shadow); }
-.typ:focus-visible { outline: 3px solid rgba(203, 172, 129, 0.7); outline-offset: 2px; }
+.typ:focus-visible { outline: 3px solid rgba(229, 197, 107, 0.7); outline-offset: 2px; }
 .typ[aria-checked='true'] { border-color: var(--copper); box-shadow: 0 0 0 2px var(--copper), var(--shadow); background: var(--grad-soft); }
 .ph { width: 5.2rem; height: 5.2rem; border-radius: 14px; background: var(--peach) center / cover no-repeat; display: grid; place-items: center; font-family: var(--font-display); font-size: 2rem; color: var(--copper); }
 .tx { display: grid; gap: 0.15rem; min-width: 0; }

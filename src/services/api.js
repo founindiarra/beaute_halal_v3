@@ -10,6 +10,8 @@
  *   POST /appointments · POST /contact
  *   POST /booking-requests (demande sans créneau, backend ≥ migration 006) · GET /tarifs
  */
+import { SALON_COIFFURES } from '@/data/coiffures'
+
 const BASE_URL = (import.meta.env.VITE_API_URL || 'https://backend-beaute-halal.aeemci-ce.ci/api').replace(
   /\/+$/,
   '',
@@ -39,7 +41,8 @@ export class ApiError extends Error {
 
 function friendlyMessage(status, payload) {
   const fromServer = payload?.error?.message
-  if (fromServer && status < 500) return fromServer
+  /* 502/503 : messages écrits pour la cliente (paiement indisponible ou non démarré) ; les autres erreurs serveur restent génériques. */
+  if (fromServer && (status < 500 || status === 502 || status === 503)) return fromServer
   if (status === 0) return 'Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.'
   if (status === 404) return 'Cette ressource est introuvable.'
   if (status === 429) return 'Trop de tentatives. Merci de patienter quelques minutes.'
@@ -124,55 +127,34 @@ export const fetchService = async (slug) => (await get(`/services/${encodeURICom
 
 export const fetchGalleryCategories = async () => (await get('/gallery/categories')).data ?? []
 
-const serviceIdOf = (item) => {
-  const id = Number(item?.service?.id ?? item?.serviceId ?? item?.service_id)
-  return Number.isInteger(id) && id > 0 ? id : null
-}
-
-/** Si l'API n'imbrique pas la prestation d'une coiffure, on la retrouve par son identifiant. */
-async function attachServices(items) {
-  const pending = items.filter((i) => !i?.service?.slug && serviceIdOf(i))
-  if (!pending.length) return items
+/**
+ * « Nos coiffures » = les coiffures gérées dans le dashboard, page « Prestations » (visibles, avec photo).
+ * Seules les coiffures du dashboard sont affichées. Si l'API ne répond pas du tout (panne), le site affiche
+ * en secours les photos intégrées (src/data/coiffures.js). Pour les mettre dans le dashboard : script d'import du backend.
+ */
+export async function fetchGalleryItems({ category, featured } = {}) {
   let services = []
+  let apiFailed = false
   try {
     services = await fetchServices()
   } catch {
-    return items
+    apiFailed = true
   }
-  const byId = new Map(services.map((s) => [Number(s.id), s]))
-  return items.map((i) => (i?.service?.slug ? i : { ...i, service: byId.get(serviceIdOf(i)) ?? null }))
-}
-
-/**
- * « Nos coiffures » = les prestations du salon (une coiffure par prestation, rangée dans
- * l'un des trois types de locks), gérées depuis la page Prestations du dashboard.
- * Si l'API n'a pas encore cette organisation (aucune prestation avec photo), on retombe
- * sur l'ancienne galerie plutôt que d'afficher une page vide.
- */
-const fromService = (s) => ({
-  id: s.id,
-  title: s.name,
-  description: s.description ?? '',
-  imageUrl: s.imageUrl,
-  isFeatured: Boolean(s.isFeatured),
-  typeId: s.category?.slug ?? null,
-  category: s.category ?? null,
-  service: null,
-})
-
-export async function fetchGalleryItems({ category, featured } = {}) {
-  try {
-    const services = await fetchServices({ category: category && category !== 'all' ? category : undefined, featured })
-    const items = services.filter((s) => s.imageUrl).map(fromService)
-    if (items.length) return items
-  } catch {
-    /* on essaie l'ancienne galerie */
-  }
-  const { data } = await get('/gallery', {
-    category: category && category !== 'all' ? category : undefined,
-    featured: featured === true ? 'true' : undefined,
-  })
-  return attachServices(data ?? [])
+  const own = services
+    .filter((s) => s.isActive !== false && s.imageUrl && s.name)
+    .map((s) => ({
+      id: s.id,
+      title: s.name,
+      description: s.description ?? '',
+      imageUrl: s.imageUrl,
+      isFeatured: Boolean(s.isFeatured),
+      typeId: s.category?.slug ?? null,
+      category: s.category ? { slug: s.category.slug, name: s.category.name } : null,
+      service: null,
+    }))
+  /* Les photos viennent du dashboard. Les photos intégrées ne servent que si l'API ne répond pas du tout. */
+  const source = apiFailed ? SALON_COIFFURES : own
+  return source.filter((i) => (!category || category === 'all' || i.typeId === category) && (featured !== true || i.isFeatured))
 }
 
 /** Pas de route GET /gallery/:id côté API publique : on filtre la liste sur l'identifiant. */
@@ -246,6 +228,17 @@ export async function createAppointment({ serviceSlug, date, time, firstName, la
  */
 export async function createBookingRequest(payload) {
   const { data } = await post('/booking-requests', payload, { timeout: 20000 })
+  return data
+}
+
+/** Paiement de la consultation (Jèko) : POST /payments/initiate → { redirectUrl }, GET /payments/status/:reference. */
+export async function initiatePayment(reference, method) {
+  const { data } = await post('/payments/initiate', { reference, method }, { timeout: 25000 })
+  return data
+}
+/** `verifier` : pendant l'attente du retour de Jèko, le serveur relit lui-même le statut chez Jèko (confirmation rapide). */
+export async function fetchPaymentStatus(reference, { verifier = false } = {}) {
+  const { data } = await get(`/payments/status/${encodeURIComponent(reference)}${verifier ? '?verifier=1' : ''}`)
   return data
 }
 

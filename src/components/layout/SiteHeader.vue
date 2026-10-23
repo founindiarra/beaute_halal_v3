@@ -157,10 +157,10 @@ const onKeydown = (e) => {
   height: 64px; padding: 0 0.7rem 0 1rem; border-radius: 999px;
   transition: height 0.4s var(--ease), background-color 0.4s, box-shadow 0.4s, max-width 0.5s var(--ease);
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  background: rgba(253, 251, 247, 0.88); backdrop-filter: blur(14px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 12px 34px -18px rgba(87, 42, 19, 0.55);
+  background: rgba(245, 237, 227, 0.97); backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 12px 34px -18px rgba(50, 24, 15, 0.55);
 }
-.is-scrolled .bar { height: 56px; max-width: calc(var(--max) - 2rem); background: rgba(253, 251, 247, 0.94); box-shadow: 0 16px 40px -16px rgba(87, 42, 19, 0.7); }
+.is-scrolled .bar { height: 56px; max-width: calc(var(--max) - 2rem); background: rgba(245, 237, 227, 0.98); box-shadow: 0 16px 40px -16px rgba(50, 24, 15, 0.7); }
 .brand { text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
 .nav-desktop { position: relative; display: none; align-items: center; gap: 0.15rem; }
 .indicator { position: absolute; left: 0; bottom: 6px; width: 100px; height: 3px; border-radius: 3px; background: var(--grad); transform-origin: left; opacity: 0; transition: transform 0.55s var(--ease), opacity 0.3s; pointer-events: none; }
@@ -170,7 +170,7 @@ const onKeydown = (e) => {
 .nav-link:hover::after { transform: scaleX(1); }
 .nav-link.is-active:not(.cta)::after { transform: scaleX(0); }
 .nav-link.is-active { font-weight: 700; }
-.nav-link.cta { margin-inline: 0.35rem; background: var(--grad-btn); color: #fff; font-weight: 700; box-shadow: 0 10px 22px -12px rgba(124, 69, 39, 0.8); }
+.nav-link.cta { margin-inline: 0.35rem; background: var(--grad-btn); color: #fff; font-weight: 700; box-shadow: 0 10px 22px -12px rgba(107, 61, 36, 0.8); }
 .nav-link.cta::after { display: none; }
 .nav-link.cta:hover { filter: brightness(1.08); }
 .nav-link.cta.is-active { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--rose); }

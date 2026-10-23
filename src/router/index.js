@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
+import { SITE } from '@/data/tarifs'
 import { applyPageMeta } from '@/utils/seo'
 
 const BRAND = 'Beauté Halal'
@@ -42,6 +43,12 @@ const routes = [
       title: `À propos — ${BRAND}`,
       description: 'Beauté Halal, l’art du soin capillaire texturé : notre engagement sur les racines et les tiges, nos tarifs transparents et le déroulé de votre rendez-vous.',
     },
+  },
+  {
+    path: '/paiement/:reference',
+    name: 'payment',
+    component: () => import('@/views/PaymentView.vue'),
+    meta: { title: `Paiement de la consultation — ${BRAND}`, description: 'Réglez la consultation pour valider votre rendez-vous.', noindex: true },
   },
   {
     path: '/rendez-vous',
@@ -107,9 +114,11 @@ router.afterEach((to) => {
   } catch {
     /* sans importance */
   }
+  /* Titre et description de la page : ceux du dashboard (« Textes et règles du site ») s'ils existent. */
+  const seo = SITE.seo?.[to.name] ?? {}
   applyPageMeta({
-    title: to.meta.title ?? BRAND,
-    description: to.meta.description ?? '',
+    title: seo.title || to.meta.title || BRAND,
+    description: seo.description || to.meta.description || '',
     path: to.path,
     noindex: Boolean(to.meta.noindex),
   })

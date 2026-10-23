@@ -1,0 +1,18 @@
+# Beauté Halal v3 — application monopage (Vue Router).
+# Sans cette règle, ouvrir ou actualiser /galerie, /services… renvoie « 404 Not Found »
+# (seule la page d'accueil existe comme fichier). Hébergement Apache/LiteSpeed (cPanel).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Le HTML ne doit jamais rester en cache : il désigne les fichiers /assets du déploiement courant.
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>

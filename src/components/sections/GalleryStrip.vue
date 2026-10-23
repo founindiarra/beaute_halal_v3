@@ -3,8 +3,10 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ApiImage from '@/components/ui/ApiImage.vue'
+import EmText from '@/components/ui/EmText.vue'
 import DataState from '@/components/ui/DataState.vue'
 import { useApiData } from '@/composables/useApiData'
+import { SITE } from '@/data/tarifs'
 import { fetchGalleryItems } from '@/services/api'
 
 const router = useRouter()
@@ -28,10 +30,10 @@ const open = (item) => router.push({ name: 'gallery', query: { photo: item.id } 
     <div class="container inner">
       <header class="head" v-reveal>
         <div>
-          <p class="eyebrow">Nos coiffures</p>
-          <h2>Des réalisations qui <em>parlent d’elles-mêmes</em></h2>
+          <p class="eyebrow">{{ SITE.sections.galerie.eyebrow }}</p>
+          <h2><EmText :text="SITE.sections.galerie.titre" /></h2>
         </div>
-        <RouterLink :to="{ name: 'gallery' }" class="link-arrow">Toutes les coiffures <span class="arrow" aria-hidden="true">→</span></RouterLink>
+        <RouterLink :to="{ name: 'gallery' }" class="link-arrow">{{ SITE.sections.galerie.lien }} <span class="arrow" aria-hidden="true">→</span></RouterLink>
       </header>
     </div>
     <DataState :loading="loading" :error="error" :empty="!items.length" loading-label="Chargement des coiffures…" empty-label="Les photos seront bientôt en ligne." @retry="reload">
@@ -68,7 +70,7 @@ const open = (item) => router.push({ name: 'gallery', query: { photo: item.id } 
 .row button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; text-align: left; border-radius: 22px; overflow: hidden; position: relative; box-shadow: 0 18px 36px -22px rgba(0, 0, 0, 0.7); }
 .row :deep(img) { transition: transform 0.8s var(--ease); }
 .row button:hover :deep(img) { transform: scale(1.06); }
-.cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 0.8rem 0.7rem; font-size: 0.82rem; font-weight: 500; color: #fff; background: linear-gradient(transparent, rgba(74, 37, 18, 0.88)); }
+.cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 0.8rem 0.7rem; font-size: 0.82rem; font-weight: 500; color: #fff; background: linear-gradient(transparent, rgba(50, 24, 15, 0.88)); }
 @keyframes slide { to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .track { animation: none; }

@@ -1,10 +1,15 @@
+<script setup>
+import EmText from '@/components/ui/EmText.vue'
+import { SITE } from '@/data/tarifs'
+</script>
+
 <template>
   <section class="nf">
     <div class="blobs" aria-hidden="true" />
     <div class="container inner">
       <p class="big" aria-hidden="true">404</p>
-      <h1>Cette page s’est <em>défaite</em>.</h1>
-      <p class="lede">L’adresse demandée n’existe pas ou n’existe plus. Revenez à l’accueil ou demandez directement un rendez-vous.</p>
+      <h1><EmText :text="SITE.sections.introuvable.titre" /></h1>
+      <p class="lede">{{ SITE.sections.introuvable.texte }}</p>
       <div class="cta">
         <RouterLink :to="{ name: 'home' }" class="btn btn-primary">Retour à l’accueil</RouterLink>
         <RouterLink :to="{ name: 'booking' }" class="link-arrow">Prendre rendez-vous <span class="arrow" aria-hidden="true">→</span></RouterLink>

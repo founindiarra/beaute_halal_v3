@@ -6,18 +6,17 @@ import TarifGrid from '@/components/services/TarifGrid.vue'
 import VisitBlock from '@/components/sections/VisitBlock.vue'
 import PageHero from '@/components/ui/PageHero.vue'
 import { heroArt } from '@/data/heroImages'
+import { SITE } from '@/data/tarifs'
 </script>
 
 <template>
   <div>
     <PageHero
       :image="heroArt.services"
-      eyebrow="Nos services"
-      title="Locks, small locks et micro-locks."
-      lede="Trois types de locks, une grille tarifaire claire et un engagement : le travail des racines et des tiges."
-    >
-      <template #title>Locks, small locks et <em>micro-locks</em>.</template>
-    </PageHero>
+      :eyebrow="SITE.pages.services.eyebrow"
+      :title="SITE.pages.services.titre"
+      :lede="SITE.pages.services.intro"
+    />
 
     <LockTypesSection :title="false" detailed />
     <TarifGrid />

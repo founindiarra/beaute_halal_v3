@@ -1,13 +1,14 @@
 <script setup>
-import { goodToKnow } from '@/data/tarifs'
+import EmText from '@/components/ui/EmText.vue'
+import { SITE, goodToKnow } from '@/data/tarifs'
 </script>
 
 <template>
   <section class="section gtk" aria-labelledby="gtk-title">
     <div class="container">
       <header class="head" v-reveal>
-        <p class="eyebrow">Bon à savoir</p>
-        <h2 id="gtk-title">Notre engagement <em>envers vous</em></h2>
+        <p class="eyebrow">{{ SITE.sections.bonASavoir.eyebrow }}</p>
+        <h2 id="gtk-title"><EmText :text="SITE.sections.bonASavoir.titre" /></h2>
       </header>
       <ul class="list">
         <li v-for="(g, i) in goodToKnow" :key="g.title" v-reveal="(i % 3) * 80">

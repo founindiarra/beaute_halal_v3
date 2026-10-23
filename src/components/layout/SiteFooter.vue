@@ -1,7 +1,7 @@
 <script setup>
 import Wordmark from '@/components/ui/Wordmark.vue'
 import { useSalon } from '@/composables/useSalon'
-import { BRAND_TAGLINE } from '@/data/tarifs'
+import { BRAND_TAGLINE, SITE } from '@/data/tarifs'
 
 const { salon, hasWhatsapp, whatsappLink } = useSalon()
 const year = new Date().getFullYear()
@@ -18,7 +18,7 @@ const nav = [
 
 <template>
   <footer class="footer-wrap on-dark">
-    <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,80 L0,80 Z" fill="#4a2512" /></svg>
+    <svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,30 L1440,80 L0,80 Z" fill="#32180f" /></svg>
     <div class="footer on-dark">
       <div v-reveal.fade class="container grid">
         <div class="col-brand">
@@ -59,7 +59,7 @@ const nav = [
 
         <div class="col">
           <h2 class="h">Rendez-vous</h2>
-          <p class="blurb">Choisissez votre besoin, votre jour et votre créneau : votre demande est enregistrée en attente, et le salon vous recontacte pour la valider.</p>
+          <p class="blurb">{{ SITE.pied.rendezvous }}</p>
           <RouterLink :to="{ name: 'booking' }" class="rdv">Demander un rendez-vous →</RouterLink>
         </div>
       </div>

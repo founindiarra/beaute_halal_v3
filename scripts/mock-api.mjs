@@ -41,7 +41,7 @@ const salon = {
   tagline: 'Texte de démonstration du mock.',
   shortDescription: 'Salon spécialisé dans les locks (données fictives du mock).',
   phone: { display: '+225 00 00 00 00 00', href: 'tel:+22500000000000' },
-  whatsapp: { number: '22500000000000', defaultMessage: 'Bonjour Beauté Halal', available: true },
+  whatsapp: { number: '2250566157432', defaultMessage: 'Bonjour Beauté Halal', available: true },
   email: 'demo@example.invalid',
   address: { line1: 'Adresse fictive', line2: '', city: 'Ville fictive', country: 'Pays fictif', note: '', mapEmbedUrl: '' },
   socials: [{ id: 'instagram', label: 'Instagram', url: 'https://example.invalid/ig' }],

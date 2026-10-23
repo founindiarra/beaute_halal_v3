@@ -3,17 +3,22 @@ import { ref } from 'vue'
 
 import HeroBackdrop from '@/components/ui/HeroBackdrop.vue'
 import { heroArt } from '@/data/heroImages'
-import { BRAND_INTRO, BRAND_TAGLINE } from '@/data/tarifs'
+import { BRAND_INTRO, BRAND_TAGLINE, SITE } from '@/data/tarifs'
 
 /* Photo d'accueil : la même que celle du site de référence (public/images/hero-accueil*.jpg),
    en deux cadrages — large pour l'ordinateur, portrait pour le téléphone. */
 
 /* Titre découpé mot à mot pour l'apparition progressive (le mot en couleur reste d'un seul bloc). */
-const titleWords = [
-  { t: 'Locks,' }, { t: 'small' }, { t: 'locks' }, { t: 'et' }, { t: 'micro-locks', em: true },
-  { t: 'à' }, { t: 'Abidjan.' },
-]
-const titleLabel = 'Locks, small locks et micro-locks à Abidjan.'
+const titleWords = SITE.accueil.titre
+  .split(/(\*[^*]+\*)/g)
+  .filter(Boolean)
+  .flatMap((part) => {
+    const em = part.startsWith('*') && part.endsWith('*') && part.length > 2
+    const texte = em ? part.slice(1, -1) : part
+    /* Un groupe mis en valeur reste d'un seul bloc ; le reste est découpé mot à mot (la virgule suit son mot). */
+    return em ? [{ t: texte, em: true }] : texte.split(/\s+/).filter(Boolean).flatMap((m) => (m.length > 1 && m.endsWith(',') ? [{ t: m.slice(0, -1) }, { t: ',' }] : [{ t: m }]))
+  })
+const titleLabel = SITE.accueil.titre.replace(/\*/g, '')
 const root = ref(null)
 const scrollDown = () => {
   const end = root.value?.offsetHeight ?? window.innerHeight
@@ -36,8 +41,8 @@ const lede = BRAND_INTRO
         </h1>
         <p class="lede">{{ lede }}</p>
         <div class="cta">
-          <RouterLink v-magnetic :to="{ name: 'booking' }" class="btn btn-primary btn-glow">Réserver mon rendez-vous</RouterLink>
-          <RouterLink :to="{ name: 'services' }" class="link-arrow">Nos services et tarifs <span class="arrow" aria-hidden="true">→</span></RouterLink>
+          <RouterLink v-magnetic :to="{ name: 'booking' }" class="btn btn-primary btn-glow">{{ SITE.accueil.bouton }}</RouterLink>
+          <RouterLink :to="{ name: 'services' }" class="link-arrow">{{ SITE.accueil.lien }} <span class="arrow" aria-hidden="true">→</span></RouterLink>
         </div>
       </div>
     </div>
@@ -47,7 +52,7 @@ const lede = BRAND_INTRO
 </template>
 
 <style scoped>
-.hero { position: relative; isolation: isolate; margin-top: calc(var(--header-h) * -1); display: flex; align-items: center; min-height: min(80svh, 48rem); padding: calc(var(--header-h) + clamp(0.5rem, 2vw, 1.5rem)) 0 clamp(5.5rem, 9vw, 7.5rem); overflow: hidden; background: #4a2512; }
+.hero { position: relative; isolation: isolate; margin-top: calc(var(--header-h) * -1); display: flex; align-items: center; min-height: min(80svh, 48rem); padding: calc(var(--header-h) + clamp(0.5rem, 2vw, 1.5rem)) 0 clamp(5.5rem, 9vw, 7.5rem); overflow: hidden; background: #32180f; }
 .copy-wrap { width: 100%; }
 .edge { position: absolute; left: 0; right: 0; bottom: -3px; width: 100%; height: clamp(50px, 7vw, 90px); }
 .copy { display: grid; gap: 1.3rem; align-content: start; max-width: 38rem; }
@@ -65,7 +70,9 @@ h1 { font-size: clamp(2.5rem, 5.6vw, 4.4rem); line-height: 1.05; color: #fff; te
 .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.8rem; margin-top: 0.3rem; }
 
 @media (max-width: 1023px) {
-  .hero { align-items: flex-end; min-height: calc(100svh + 5rem); padding-top: 47svh; }
+  /* Mobile : le bouton de rendez-vous vient juste sous la photo, avant les textes. */
+  .copy > .cta { order: -1; margin: 0 0 0.4rem; }
+  .hero { align-items: flex-start; min-height: 0; padding-top: calc(var(--hero-img-top) + var(--hero-img-h) - 0.75rem); padding-bottom: 6rem; }
 }
 
 /* Indicateur de défilement */

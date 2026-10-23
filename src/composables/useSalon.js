@@ -21,7 +21,12 @@ const empty = () => ({
   hours: [],
   currency: 'FCFA',
   bookingWindowDays: 60,
+  consultationFee: 5000,
 })
+
+/** Page Facebook du salon : ajoutée si le dashboard (Paramètres) n'en renseigne pas. */
+const FACEBOOK = { id: 'facebook', label: 'Facebook', url: 'https://www.facebook.com/profile.php?id=61578860944266' }
+const withFacebook = (list) => (list.some((s) => s.id === 'facebook') ? list : [...list, FACEBOOK])
 
 const state = reactive({ salon: empty(), loading: false, error: null, loaded: false })
 let inflight = null
@@ -44,7 +49,7 @@ export async function loadSalon({ force = false } = {}) {
         phone: { ...base.phone, ...(data?.phone ?? {}) },
         whatsapp: { ...base.whatsapp, ...(data?.whatsapp ?? {}) },
         address: { ...base.address, ...(data?.address ?? {}) },
-        socials: data?.socials ?? [],
+        socials: withFacebook(data?.socials ?? []),
         hours: data?.hours ?? [],
       }
       state.loaded = true
@@ -67,7 +72,9 @@ export async function loadSalon({ force = false } = {}) {
 export function useSalon() {
   loadSalon()
   const salon = computed(() => state.salon)
-  const waNumber = computed(() => (state.salon.whatsapp?.number || WHATSAPP.number).replace(/\D/g, ''))
+  // Numéro WhatsApp unique du site : celui du catalogue (réglable dans le dashboard, Tarifs → contact),
+  // par défaut +225 05 66 15 74 32. Le réglage « WhatsApp » des paramètres du salon ne sert plus aux liens.
+  const waNumber = computed(() => String(WHATSAPP.number || '').replace(/\D/g, ''))
 
   /** Lien WhatsApp, ou null tant que le salon n'a pas renseigné son numéro. */
   const whatsappLink = (message) => {

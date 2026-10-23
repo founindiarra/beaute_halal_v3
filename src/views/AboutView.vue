@@ -5,9 +5,9 @@ import VisitBlock from '@/components/sections/VisitBlock.vue'
 import GoodToKnow from '@/components/sections/GoodToKnow.vue'
 import SignatureBand from '@/components/sections/SignatureBand.vue'
 import PageHero from '@/components/ui/PageHero.vue'
-import { heroArt } from '@/data/heroImages'
+import { aboutPhotos, heroArt } from '@/data/heroImages'
 import { values } from '@/data/editorial'
-import { BRAND_INTRO } from '@/data/tarifs'
+import { BRAND_INTRO, SITE } from '@/data/tarifs'
 import { pad2 } from '@/utils/format'
 
 </script>
@@ -16,12 +16,11 @@ import { pad2 } from '@/utils/format'
   <div>
     <PageHero
       :image="heroArt.about"
-      eyebrow="À propos"
-      title="L’art du soin capillaire texturé."
+      :disc="aboutPhotos"
+      :eyebrow="SITE.pages.apropos.eyebrow"
+      :title="SITE.pages.apropos.titre"
       :lede="BRAND_INTRO"
-    >
-      <template #title>L’art du soin capillaire <em>texturé</em>.</template>
-    </PageHero>
+    />
 
     <section class="section">
       <div class="container grid">

@@ -23,6 +23,6 @@ export const values = [
 export const process = [
   { title: 'Identifiez', text: 'Votre type de locks (traditionnelles, small ou micro) et votre volume, de XS à XL.' },
   { title: 'Estimez', text: 'Le tarif indicatif selon la formule, le délai depuis votre dernière séance et l’état de vos locks.' },
-  { title: 'Réservez', text: 'Création complète ou resserrage, votre type de locks et votre volume, puis vos informations.' },
-  { title: 'Confirmez', text: 'Le salon confirme votre rendez-vous.' },
+  { title: 'Réservez', text: 'Installation, resserrage ou réparation, puis votre jour et votre heure parmi les créneaux proposés.' },
+  { title: 'Confirmez', text: 'Votre avance versée valide automatiquement votre rendez-vous.' },
 ]

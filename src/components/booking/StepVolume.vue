@@ -35,10 +35,10 @@ const hint = computed(() => VOLUMES.find((v) => v.id === volume.value)?.hint)
 <style scoped>
 .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
 @media (min-width: 640px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-.pick { position: relative; display: grid; align-content: start; justify-items: center; gap: 0.15rem; padding: 0.5rem 0.5rem 0.9rem; font: inherit; text-align: center; color: var(--ink); background: #fff; border: 1.5px solid rgba(87, 42, 19, 0.15); border-radius: 18px; cursor: pointer; transition: all 0.25s var(--ease); animation: cardIn 0.75s var(--ease) both; }
+.pick { position: relative; display: grid; align-content: start; justify-items: center; gap: 0.15rem; padding: 0.5rem 0.5rem 0.9rem; font: inherit; text-align: center; color: var(--ink); background: #fff; border: 1.5px solid rgba(50, 24, 15, 0.15); border-radius: 18px; cursor: pointer; transition: all 0.25s var(--ease); animation: cardIn 0.75s var(--ease) both; }
 .pick:nth-child(2) { animation-delay: 70ms; } .pick:nth-child(3) { animation-delay: 140ms; } .pick:nth-child(4) { animation-delay: 210ms; } .pick:nth-child(5) { animation-delay: 280ms; } .pick:nth-child(6) { animation-delay: 340ms; }
 .pick:hover { border-color: var(--copper); transform: translateY(-3px); box-shadow: var(--shadow); }
-.pick:focus-visible { outline: 3px solid rgba(203, 172, 129, 0.7); outline-offset: 2px; }
+.pick:focus-visible { outline: 3px solid rgba(229, 197, 107, 0.7); outline-offset: 2px; }
 .pick[aria-checked='true'] { border-color: var(--copper); box-shadow: 0 0 0 2px var(--copper), var(--shadow); background: var(--grad-soft); }
 .pick img, .qm { width: 100%; aspect-ratio: 1 / 1.05; object-fit: cover; border-radius: 12px; background: var(--peach); }
 .qm { display: grid; place-items: center; font-family: var(--font-display); font-size: 3.4rem; color: var(--copper); }

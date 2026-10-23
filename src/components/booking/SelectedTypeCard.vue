@@ -1,7 +1,7 @@
 <script setup>
 import ApiImage from '@/components/ui/ApiImage.vue'
 import { typeImages } from '@/data/heroImages'
-import { consultation, estimate, findFormule, startingPrice } from '@/data/tarifs'
+import { REPARATIONS, consultation, estimate, findFormule, startingPrice } from '@/data/tarifs'
 import { formatPrice } from '@/utils/format'
 import { computed } from 'vue'
 
@@ -14,7 +14,11 @@ const props = defineProps({
 defineEmits(['change'])
 
 const price = computed(() => {
-  if (props.besoin === 'creation') return { label: 'Création', text: 'Tarif annoncé après la consultation', note: consultation.nouvelle }
+  if (props.besoin === 'creation') return { label: 'Installation', text: 'Tarif annoncé par le salon après diagnostic', note: consultation.final }
+  if (props.besoin === 'reparation') {
+    const mini = Math.min(...REPARATIONS.map((x) => x.from).filter(Number.isFinite))
+    return { label: 'Tarif indicatif · Réparation', text: Number.isFinite(mini) ? `dès ${formatPrice(mini)} selon le niveau` : 'selon le niveau de réparation', note: consultation.final }
+  }
   if (props.besoin === 'resserrage' && props.resserrage.type === props.type.id) {
     const est = estimate(props.resserrage)
     if (est) {

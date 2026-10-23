@@ -1,42 +1,37 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
-import { FORMULES, LONGUEURS, consultation, estimate, findFormule, findType, longueurImage } from '@/data/tarifs'
-import { clearCreation, clearResserrage, setCreation, setResserrage, useBooking } from '@/composables/useBooking'
+import { FORMULES, REPARATIONS, consultation, estimate, findFormule, findType } from '@/data/tarifs'
+import { clearResserrage, setReparation, setResserrage, useBooking } from '@/composables/useBooking'
 import { formatPrice } from '@/utils/format'
 
 const { state } = useBooking()
-const isCreation = computed(() => state.besoin === 'creation')
-const skipLong = ref(false)
-const c = computed(() => state.creation)
 const r = computed(() => state.resserrage)
 const type = computed(() => findType(r.value.type))
 const formule = computed(() => findFormule(r.value.formule))
-const isRepair = computed(() => r.value.formule === 'reparation')
-const est = computed(() => (type.value ? estimate(r.value) : null))
+const isRepair = computed(() => state.besoin === 'reparation')
+const formulesResserrage = computed(() => FORMULES.filter((f) => f.id !== 'reparation'))
+/* Réparation : le tarif n'apparaît qu'une fois le niveau choisi. */
+const est = computed(() => (type.value && (!isRepair.value || state.reparation) ? estimate({ ...r.value, reparation: state.reparation }) : null))
 const money = (n) => `${n > 0 ? '+' : n < 0 ? '−' : ''}${formatPrice(Math.abs(n))}`
 </script>
 
 <template>
-  <!-- Création : la longueur, en images -->
-  <fieldset v-if="isCreation" class="crit">
-    <legend>Quelle est la longueur de vos cheveux ?</legend>
-    <p class="sub">Choisissez l’image qui correspond à votre longueur actuelle.</p>
-    <div class="grid" role="radiogroup" aria-label="Longueur">
-      <button v-for="l in LONGUEURS" :key="l.label" type="button" role="radio" class="pick" :aria-checked="c.longueur === l.label" @click="skipLong = false; setCreation({ longueur: l.label })">
-        <img :src="longueurImage(l.label)" alt="" loading="lazy" />
-        <strong>{{ l.label }}</strong>
-        <small>{{ l.hint }}</small>
-        <span class="check" aria-hidden="true">✓</span>
-      </button>
-      <button type="button" role="radio" class="pick none" :aria-checked="skipLong" @click="skipLong = true; setCreation({ longueur: '' })">
-        <span class="qm" aria-hidden="true">?</span>
-        <strong>Je ne sais pas</strong>
-        <small>À évaluer sur place</small>
-        <span class="check" aria-hidden="true">✓</span>
+  <!-- Réparation : partielle ou globale -->
+  <fieldset v-if="isRepair" class="crit">
+    <legend>Votre réparation <span class="opt-tag">tarif indicatif</span></legend>
+    <p class="q">Quel niveau de réparation ?</p>
+    <div class="rep" role="radiogroup" aria-label="Niveau de réparation">
+      <button v-for="x in REPARATIONS" :key="x.id" type="button" role="radio" class="bchip repchip" :aria-checked="state.reparation === x.id" @click="setReparation(x.id)">
+        <strong>{{ x.name }}</strong>
+        <small>{{ x.text }}</small>
       </button>
     </div>
-    <button v-if="c.longueur" type="button" class="linkish" @click="clearCreation()">Effacer ce choix</button>
+    <div v-if="est" class="estimate" role="status">
+      <p class="price">À partir de <strong>{{ formatPrice(est.total) }}</strong></p>
+      <p class="hint">{{ consultation.final }}</p>
+    </div>
+    <p v-else class="hint">Le tarif d’une réparation dépend de l’ampleur des dégâts : il vous est annoncé avant la prestation.</p>
   </fieldset>
 
   <!-- Resserrage : prestation, délai, état + tarif indicatif -->
@@ -44,7 +39,7 @@ const money = (n) => `${n > 0 ? '+' : n < 0 ? '−' : ''}${formatPrice(Math.abs(
     <legend>Votre resserrage <span class="opt-tag">tarif indicatif</span></legend>
     <p class="q">Quelle prestation ?</p>
     <div class="bchips" role="radiogroup" aria-label="Prestation">
-      <button v-for="f in FORMULES" :key="f.id" type="button" role="radio" class="bchip" :aria-checked="r.formule === f.id" @click="setResserrage({ formule: f.id })">{{ f.short }} <small>{{ f.detail }}</small></button>
+      <button v-for="f in formulesResserrage" :key="f.id" type="button" role="radio" class="bchip" :aria-checked="r.formule === f.id" @click="setResserrage({ formule: f.id })">{{ f.short }} <small>{{ f.detail }}</small></button>
     </div>
     <p class="hint">{{ formule?.help }}</p>
 
@@ -74,14 +69,17 @@ const money = (n) => `${n > 0 ? '+' : n < 0 ? '−' : ''}${formatPrice(Math.abs(
 </template>
 
 <style scoped>
+.rep { display: grid; gap: 0.7rem; }
+.repchip { display: grid; gap: 0.3rem; text-align: left; padding: 1rem 1.2rem; }
+.repchip small { font-weight: 400; line-height: 1.5; }
 .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
 @media (min-width: 640px) { .grid { grid-template-columns: repeat(4, 1fr); } }
-.pick { position: relative; display: grid; align-content: start; justify-items: center; gap: 0.15rem; padding: 0.5rem 0.5rem 0.9rem; font: inherit; text-align: center; color: var(--ink); background: #fff; border: 1.5px solid rgba(87, 42, 19, 0.15); border-radius: 18px; cursor: pointer; transition: all 0.25s var(--ease); animation: cardIn 0.75s var(--ease) both; }
+.pick { position: relative; display: grid; align-content: start; justify-items: center; gap: 0.15rem; padding: 0.5rem 0.5rem 0.9rem; font: inherit; text-align: center; color: var(--ink); background: #fff; border: 1.5px solid rgba(50, 24, 15, 0.15); border-radius: 18px; cursor: pointer; transition: all 0.25s var(--ease); animation: cardIn 0.75s var(--ease) both; }
 .pick:nth-child(2) { animation-delay: 70ms; } .pick:nth-child(3) { animation-delay: 140ms; } .pick:nth-child(4) { animation-delay: 210ms; }
 .pick:hover { border-color: var(--copper); transform: translateY(-3px); box-shadow: var(--shadow); }
-.pick:focus-visible { outline: 3px solid rgba(203, 172, 129, 0.7); outline-offset: 2px; }
+.pick:focus-visible { outline: 3px solid rgba(229, 197, 107, 0.7); outline-offset: 2px; }
 .pick[aria-checked='true'] { border-color: var(--copper); box-shadow: 0 0 0 2px var(--copper), var(--shadow); background: var(--grad-soft); }
-.pick img, .qm { width: 100%; aspect-ratio: 1 / 1.08; object-fit: cover; border-radius: 12px; background: var(--peach); }
+.pick img, .qm { width: 100%; aspect-ratio: 1 / 1.08; object-fit: cover; object-position: 50% 25%; border-radius: 12px; background: var(--peach); }
 .qm { display: grid; place-items: center; font-family: var(--font-display); font-size: 3.4rem; color: var(--copper); }
 .pick strong { margin-top: 0.4rem; font-family: var(--font-display); font-size: 1.4rem; line-height: 1; }
 .pick small { color: var(--muted); font-size: 0.8rem; }

@@ -10,7 +10,7 @@ import PageHero from '@/components/ui/PageHero.vue'
 import { preselectFromGallery } from '@/composables/useBooking'
 import { useApiData } from '@/composables/useApiData'
 import { heroArt } from '@/data/heroImages'
-import { LOCK_TYPES, PRESTATIONS, inferType } from '@/data/tarifs'
+import { PRESTATIONS, SITE, resolveType } from '@/data/tarifs'
 import { fetchGalleryItems } from '@/services/api'
 
 const route = useRoute()
@@ -19,9 +19,7 @@ const router = useRouter()
 const { data, loading, error, reload } = useApiData(() => fetchGalleryItems(), [])
 const items = computed(() => (data.value ?? []).filter((i) => i.imageUrl))
 const typeName = (item) =>
-  (item.typeId && LOCK_TYPES.find((t) => t.id === item.typeId)?.name) ||
-  inferType(`${item.title} ${item.description ?? ''}`)?.name ||
-  ''
+  resolveType(item)?.name || ''
 const load = () => reload()
 
 const current = ref(-1)
@@ -50,9 +48,7 @@ const book = (item) => {
 
 <template>
   <div>
-    <PageHero :image="heroArt.gallery" eyebrow="Nos coiffures" title="Les coiffures du salon." lede="Ouvrez une photo en grand, puis demandez un rendez-vous pour la coiffure qui vous plaît : création complète ou resserrage.">
-      <template #title>Les <em>coiffures</em> du salon.</template>
-    </PageHero>
+    <PageHero :image="heroArt.gallery" :eyebrow="SITE.pages.galerie.eyebrow" :title="SITE.pages.galerie.titre" :lede="SITE.pages.galerie.intro" />
 
     <section class="section-tight">
       <div class="container">
@@ -87,7 +83,7 @@ const book = (item) => {
       </div>
     </section>
 
-    <VisitBlock title="Une coiffure vous inspire ?" text="Ouvrez la photo, choisissez « Réserver cette coiffure », puis indiquez s’il s’agit d’une création complète ou d’un resserrage." />
+    <VisitBlock :title="SITE.invitationGalerie.titre" :text="SITE.invitationGalerie.texte" />
 
     <Transition name="lb"><GalleryLightbox v-if="current >= 0 && items[current]" v-model:index="current" :items="items" @close="close" @book="book" /></Transition>
   </div>
@@ -111,7 +107,7 @@ const book = (item) => {
 .card:hover .presta { font-size: 0.78rem; line-height: 1.35; color: var(--muted); }
 .more { letter-spacing: 0.04em; }
 /* Voile sombre + reflet au survol de la photo */
-.media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(74, 37, 18, 0.45)); opacity: 0; transition: opacity 0.5s var(--ease); pointer-events: none; }
+.media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(50, 24, 15, 0.45)); opacity: 0; transition: opacity 0.5s var(--ease); pointer-events: none; }
 .card:hover .media::after, .card:focus-visible .media::after { opacity: 1; }
 @media (min-width: 760px) { .cards { grid-template-columns: repeat(3, 1fr); gap: 1.4rem; } }
 @media (min-width: 1100px) { .cards { grid-template-columns: repeat(4, 1fr); } }

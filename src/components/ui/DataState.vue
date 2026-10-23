@@ -34,9 +34,9 @@ defineEmits(['retry'])
 <style scoped>
 .ds { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 2.5rem 1rem; text-align: center; color: var(--muted); }
 .sk { display: grid; gap: 0.6rem; width: min(22rem, 80%); }
-.sk i { display: block; height: 0.8rem; border-radius: 999px; background: linear-gradient(90deg, rgba(74, 37, 18, 0.07) 25%, rgba(124, 69, 39, 0.18) 50%, rgba(74, 37, 18, 0.07) 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+.sk i { display: block; height: 0.8rem; border-radius: 999px; background: linear-gradient(90deg, rgba(50, 24, 15, 0.07) 25%, rgba(107, 61, 36, 0.18) 50%, rgba(50, 24, 15, 0.07) 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
 .sk i:nth-child(2) { width: 80%; }
 .sk i:nth-child(3) { width: 55%; }
 @keyframes shimmer { to { background-position: -200% 0; } }
-.ds-error { color: var(--ink); border: 1.5px dashed rgba(74, 37, 18, 0.25); border-radius: var(--radius-lg); }
+.ds-error { color: var(--ink); border: 1.5px dashed rgba(50, 24, 15, 0.25); border-radius: var(--radius-lg); }
 </style>

@@ -1,4 +1,5 @@
 <script setup>
+import EmText from '@/components/ui/EmText.vue'
 import HeroBackdrop from '@/components/ui/HeroBackdrop.vue'
 
 /**
@@ -9,6 +10,9 @@ defineProps({
   image: { type: String, default: '' },
   /** Photo ronde posée dans le premier cercle (quand la photo n'est pas détourée). */
   disc: { type: String, default: '' },
+  /** Vidéo d'ambiance (muette, en boucle) qui remplace la photo ; la photo sert d'image d'attente et de secours. */
+  video: { type: String, default: '' },
+  poster: { type: String, default: '' },
   eyebrow: { type: String, required: true },
   title: { type: String, required: true },
   lede: { type: String, default: '' },
@@ -18,10 +22,10 @@ defineProps({
 
 <template>
   <section class="phero on-dark" :class="{ compact }">
-    <HeroBackdrop :src="image" :disc="disc" eager />
+    <HeroBackdrop :src="image" :disc="disc" :video="video" :poster="poster" eager />
     <div class="container content">
       <p class="eyebrow">{{ eyebrow }}</p>
-      <h1><slot name="title">{{ title }}</slot></h1>
+      <h1><slot name="title"><EmText :text="title" /></slot></h1>
       <p v-if="lede" class="lede">{{ lede }}</p>
       <slot />
     </div>
@@ -30,7 +34,7 @@ defineProps({
 </template>
 
 <style scoped>
-.phero { margin-bottom: -1px; position: relative; isolation: isolate; display: flex; align-items: center; min-height: min(62svh, 34rem); margin-top: calc(var(--header-h) * -1); padding: calc(var(--header-h) + clamp(2.75rem, 6vw, 4.75rem)) 0 clamp(4.5rem, 8vw, 6.5rem); overflow: hidden; background: #4a2512; }
+.phero { margin-bottom: -1px; position: relative; isolation: isolate; display: flex; align-items: center; min-height: min(62svh, 34rem); margin-top: calc(var(--header-h) * -1); padding: calc(var(--header-h) + clamp(2.75rem, 6vw, 4.75rem)) 0 clamp(4.5rem, 8vw, 6.5rem); overflow: hidden; background: #32180f; }
 .phero > .content { width: 100%; }
 .content { display: grid; gap: 1.2rem; max-width: calc(var(--max) + var(--gutter) * 2); }
 .content > * { max-width: 40rem; animation: rise 0.95s var(--ease) both; }
@@ -43,5 +47,5 @@ h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); color: #fff; text-shadow: 0 2px 24px
 .wave { position: absolute; left: 0; right: 0; bottom: -3px; width: 100%; height: clamp(40px, 6vw, 80px); }
 .compact { min-height: min(52svh, 28rem); padding-bottom: clamp(4rem, 7vw, 5.5rem); }
 .compact h1 { font-size: clamp(2.2rem, 5.4vw, 3.6rem); }
-@media (max-width: 1023px) { .phero { align-items: flex-end; min-height: 84svh; padding-top: 41svh; } .compact { min-height: 76svh; } }
+@media (max-width: 1023px) { .phero, .compact { align-items: flex-start; min-height: 0; padding-top: calc(var(--hero-img-top) + var(--hero-img-h) - 0.75rem); padding-bottom: 5rem; } }
 </style>

@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
 .progress { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 210; pointer-events: none; }
 .progress i { display: block; height: 100%; background: var(--grad); transform: scaleX(0); transform-origin: left; will-change: transform; }
 
-.to-top { position: fixed; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem); z-index: 120; width: 56px; height: 56px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; cursor: pointer; color: #fff; background: var(--ink); box-shadow: 0 16px 30px -12px rgba(74, 37, 18, 0.7); transition: transform 0.3s var(--ease), background-color 0.3s; }
+.to-top { position: fixed; right: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem); z-index: 120; width: 56px; height: 56px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; cursor: pointer; color: #fff; background: var(--ink); box-shadow: 0 16px 30px -12px rgba(50, 24, 15, 0.7); transition: transform 0.3s var(--ease), background-color 0.3s; }
 .to-top:hover { transform: translateY(-4px); background: var(--wine); }
 .to-top svg { position: absolute; inset: 4px; width: 48px; height: 48px; transform: rotate(-90deg); }
 .to-top .track { fill: none; stroke: rgba(255, 255, 255, 0.18); stroke-width: 2.5; }

@@ -1,0 +1,5 @@
+Logos des moyens de paiement (Wave, Orange Money, MTN MoMo, Moov Money, Djamo).
+Déposez ici les logos officiels, un fichier par moyen, avec ces noms exacts :
+  wave.svg  orange.svg  mtn.svg  moov.svg  djamo.svg
+(format SVG ou PNG renommé en .svg impossible : utilisez du vrai SVG ; fond transparent, environ 160 x 48 px).
+Tant qu'un fichier est absent, seul le nom du moyen s'affiche.

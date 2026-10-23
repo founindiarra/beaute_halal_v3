@@ -6,6 +6,7 @@ import DataState from '@/components/ui/DataState.vue'
 import PageHero from '@/components/ui/PageHero.vue'
 import { useSalon } from '@/composables/useSalon'
 import { heroArt } from '@/data/heroImages'
+import { SITE } from '@/data/tarifs'
 
 const { salon, loading, error, hasWhatsapp, whatsappLink, reload, loaded } = useSalon()
 
@@ -21,9 +22,7 @@ const hasInfo = computed(
 
 <template>
   <div>
-    <PageHero :image="heroArt.contact" eyebrow="Contact" title="Écrivez-nous, appelez-nous." lede="Pour une question avant de réserver, ou pour modifier une demande déjà envoyée (rappelez alors votre référence).">
-      <template #title>Écrivez-<em>nous</em>, appelez-nous.</template>
-    </PageHero>
+    <PageHero :image="heroArt.contact" :eyebrow="SITE.pages.contact.eyebrow" :title="SITE.pages.contact.titre" :lede="SITE.pages.contact.intro" />
 
     <section class="section-tight">
       <div class="container grid">
@@ -85,7 +84,7 @@ const hasInfo = computed(
 .grid { display: grid; gap: 2rem; align-items: start; }
 .info, .form-col { padding: clamp(1.4rem, 4vw, 2.4rem); background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
 .list { display: grid; margin: 0; }
-.list > div { display: grid; gap: 0.3rem; padding-block: 1.1rem; border-bottom: 1px solid rgba(74, 37, 18, 0.1); }
+.list > div { display: grid; gap: 0.3rem; padding-block: 1.1rem; border-bottom: 1px solid rgba(50, 24, 15, 0.1); }
 .list > div:first-child { padding-top: 0; }
 .list > div:last-child { border-bottom: 0; padding-bottom: 0; }
 dt { font-size: 0.76rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--copper); }

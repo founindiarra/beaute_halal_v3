@@ -41,7 +41,7 @@ const wa = () => whatsappLink(`Bonjour Beauté Halal, je viens d’envoyer une d
 </template>
 
 <style scoped>
-.tick { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; background: var(--grad-soft); animation: pop 0.7s var(--ease) both; box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.35), var(--shadow); }
+.tick { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; background: var(--grad-soft); animation: pop 0.7s var(--ease) both; box-shadow: 0 0 0 0 rgba(107, 61, 36, 0.35), var(--shadow); }
 .tick svg { width: 56px; height: 56px; fill: none; stroke: var(--copper); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .tick circle { stroke-dasharray: 145; stroke-dashoffset: 145; animation: draw 0.9s 0.2s var(--ease) forwards; }
 .tick path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw 0.5s 0.9s var(--ease) forwards; }

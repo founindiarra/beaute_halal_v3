@@ -1,7 +1,9 @@
 <script setup>
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+import EmText from '@/components/ui/EmText.vue'
 import { useApiData } from '@/composables/useApiData'
+import { SITE } from '@/data/tarifs'
 import { fetchTestimonials } from '@/services/api'
 import { formatDateShort } from '@/utils/format'
 
@@ -37,8 +39,8 @@ watch(items, () => nextTick(update))
     <div class="container">
       <header class="head" v-reveal>
         <div>
-          <p class="eyebrow">Avis de clientes</p>
-          <h2>Elles en parlent <em>mieux que nous</em></h2>
+          <p class="eyebrow">{{ SITE.sections.avis.eyebrow }}</p>
+          <h2><EmText :text="SITE.sections.avis.titre" /></h2>
         </div>
         <div class="tools">
           <p v-if="average" class="avg"><span class="numeral">{{ average.toFixed(1).replace('.', ',') }}</span> / 5 <span class="sr-only">de moyenne</span></p>

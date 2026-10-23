@@ -2,7 +2,8 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { FORMULES, LOCK_TYPES, LONGUEURS, VOLUMES, consultation, engagement, findType, videoAdvice } from '@/data/tarifs'
+import EmText from '@/components/ui/EmText.vue'
+import { FORMULES, LOCK_TYPES, LONGUEURS, SITE, VOLUMES, consultation, engagement, findType, videoAdvice } from '@/data/tarifs'
 import { formatPrice } from '@/utils/format'
 
 const route = useRoute()
@@ -19,9 +20,9 @@ const reserver = (volume) => ({ name: 'booking', query: { type: activeId.value, 
   <section id="tarifs" class="section on-paper tarifs" aria-labelledby="tarifs-title">
     <div class="container">
       <header class="head" v-reveal>
-        <p class="eyebrow">Grille tarifaire</p>
-        <h2 id="tarifs-title">Resserrage de locks : <em>des tarifs clairs</em></h2>
-        <p class="lede">Nos tarifs dépendent du type de vos locks, du volume de vos cheveux et du délai depuis votre dernière séance. Le volume est le critère qui influence le plus la durée et le prix.</p>
+        <p class="eyebrow">{{ SITE.sections.grille.eyebrow }}</p>
+        <h2 id="tarifs-title"><EmText :text="SITE.sections.grille.titre" /></h2>
+        <p class="lede">{{ SITE.sections.grille.intro }}</p>
       </header>
 
       <div class="tabs" role="group" aria-label="Type de locks">
@@ -147,7 +148,7 @@ tbody th small { color: var(--muted); font-size: 0.8rem; }
 .note::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--grad); }
 .note h3 { font-size: clamp(1.35rem, 2.4vw, 1.7rem); }
 .note ul { display: grid; gap: 0.85rem; font-size: 0.97rem; line-height: 1.5; }
-.note li { display: grid; grid-template-columns: 5.6rem 1fr; gap: 0.2rem 1rem; align-items: baseline; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(74, 37, 18, 0.08); }
+.note li { display: grid; grid-template-columns: 5.6rem 1fr; gap: 0.2rem 1rem; align-items: baseline; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(50, 24, 15, 0.08); }
 .note li:last-child { border-bottom: 0; padding-bottom: 0; }
 .note li strong { display: grid; place-items: center; min-height: 2.1rem; padding: 0.2rem 0.6rem; font-size: 0.82rem; letter-spacing: 0.04em; color: var(--copper); background: var(--grad-soft); border-radius: 999px; }
 .formules li { grid-template-columns: 1fr; gap: 0.35rem; }
